@@ -1,0 +1,14 @@
+.react-calendar__tile {
+    position: relative;
+}
+
+.dot {
+    position: absolute;
+    bottom: 5px; /* Placera pricken nära botten av cellen */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: red; /* Eller den färg du vill ha */
+    border-radius: 50%;
+}
