@@ -6,8 +6,10 @@ import RegisterUser from './RegisterUser';
 import Homelogedin from "./Homelogedin";
 import Header from './Header';
 import Footer from './Footer';
+import AddHours from "./AddHours";
 import './App.css'; // eller motsvarande fil
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
     return (
@@ -15,12 +17,12 @@ function App() {
             <div>
                 {/* Header visas på varje sida */}
                 <Header />
-
                 {/* Definiera sidans innehåll baserat på URL */}
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/register" element={<RegisterUser />} />
                     <Route path="/homelogedin" element={<Homelogedin />}  />
+                    <Route path="/addHours" element={<AddHours />}  />
                 </Routes>
 
                 {/* Footer visas på varje sida */}
