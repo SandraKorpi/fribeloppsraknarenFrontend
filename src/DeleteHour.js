@@ -32,6 +32,7 @@ const DeleteHour = () => {
     };
     // Funktion för att hantera bekräftelse av radering
     const confirmDelete = () => {
+        handleInkomster();
         setShowPopup(false);
         // Lägg till din raderingslogik här, t.ex., anropa en API-funktion för att radera
         console.log("Elementet har raderats");
@@ -43,10 +44,9 @@ const DeleteHour = () => {
     };
 
     // Kallar på metoden som skickar timmarna till API:et.
-    const handleInkomster = async (e) => {
-        e.preventDefault();
+    const handleInkomster = async () => {
         try {
-            const response = await HourService.deleteHour(month, day, year);
+            const response = await HourService.deleteHour(year, month, day);
             console.log("Raderign av timmar fungerade:", response);
             setError(null);
             //tillbaka till hemsidan när registreringen är klar.

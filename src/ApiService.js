@@ -126,16 +126,15 @@ const getPayForMonth = async (year, month) => {
 const deleteHour = async ( year, month, date) =>{
     try {
         const token = localStorage.getItem("token");
-        const response = await axios.delete(`${API_URL}/api/worked-hours/year/${year}/month/${month}/date/${date}`, {
+        const response = await axios.delete(`${API_URL}/api/worked-hours/delete/year/${year}/month/${month}/date/${date}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
         });
         console.log("API Response:", response.data);
-        console.log("API Response:", response.data);
         return response.data; } catch (error) {
-        console.error("Fel vid hämtning", error)
-        throw new error("Det gick inte att hämta alla timmar.")
+        console.error("Fel vid adering", error)
+        throw new error("Det gick inte att radera timmarna.")
     }
 };
 

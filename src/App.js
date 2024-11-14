@@ -8,6 +8,7 @@ import Header from './Header';
 import Footer from './Footer';
 import AddHours from "./AddHours";
 import UpdateHours from "./UpdateHours";
+import DeleteHour from "./DeleteHour";
 import './App.css'; // eller motsvarande fil
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/homelogedin" element={<Homelogedin />}  />
                     <Route path="/addHours" element={<AddHours />}  />
                     <Route path="/updateHours" element={<UpdateHours />}  />
+                    <Route path="/deleteHour" element={<DeleteHour />}  />
                 </Routes>
 
                 {/* Footer visas på varje sida */}
