@@ -127,7 +127,7 @@ const Customcalendar = () => {
                             Lägg till timmar
                         </Dropdown.Item>
 
-                        <Dropdown.Item as={Link} to="/editHours">Ändra timmar</Dropdown.Item>
+                        <Dropdown.Item as={Link} to={`/updateHours?selectedDate=${date.toISOString()}`}>Ändra timmar</Dropdown.Item>
                         <Dropdown.Item as={Link} to="/deleteHours">Radera timmar</Dropdown.Item>
                     </Dropdown.Menu>
                     <Button variant="secondary" onClick={closeMenu}>Stäng</Button>

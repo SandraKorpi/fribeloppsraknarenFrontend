@@ -7,6 +7,7 @@ import Homelogedin from "./Homelogedin";
 import Header from './Header';
 import Footer from './Footer';
 import AddHours from "./AddHours";
+import UpdateHours from "./UpdateHours";
 import './App.css'; // eller motsvarande fil
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/register" element={<RegisterUser />} />
                     <Route path="/homelogedin" element={<Homelogedin />}  />
                     <Route path="/addHours" element={<AddHours />}  />
+                    <Route path="/updateHours" element={<UpdateHours />}  />
                 </Routes>
 
                 {/* Footer visas på varje sida */}

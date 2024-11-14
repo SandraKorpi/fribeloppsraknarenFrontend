@@ -1,26 +1,89 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import HourService from "./HourService";
 
 const AddHours = () => {
+    // Tar in datumet från kalendern.
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const selectedDateStr = params.get('selectedDate');
     const selectedDate = selectedDateStr ? new Date(selectedDateStr) : null;
 
-    if (!selectedDate) {
-        return <div>Inget datum valt</div>; // Visa meddelande om inget datum valts
-    }
+    // Tillståndsvariabler för att spara inputvärden och datumets komponenter
+    const [hours, setHours] = useState("");
+    const [date, setDate] = useState("");
+    const [hourlyRate, setHourlyRate] = useState("");
+    const [vacationPay, setVacationPay] = useState("");
+    const [error, setError] = useState(null);
+    const [year, setYear] = useState(null); // Nytt tillstånd för år
+    const [month, setMonth] = useState(null); // Nytt tillstånd för månad
+    const [day, setDay] = useState(null); // Nytt tillstånd för dag
+    const navigate = useNavigate();
 
-    const year = selectedDate.getFullYear();
-    const month = selectedDate.getMonth() + 1; // Kom ihåg att månader är 0-indexerade
-    const day = selectedDate.getDate();
+    // Kontroll för om datum är valt
+    useEffect(() => {
+        if (selectedDate) {
+            setYear(selectedDate.getFullYear());
+            setMonth(selectedDate.getMonth() + 1); // Månader är 0-indexerade
+            setDay(selectedDate.getDate());
+        }
+    }, [selectedDate]);
+
+    // Kallar på metoden som skickar timmarna till API:et.
+    const handleInkomster = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await HourService.addHours(hours, month, day, year, hourlyRate, vacationPay);
+            console.log("Registrering av timmar fungerade:", response);
+            setError(null);
+            //tillbaka till hemsidan när registreringen är klar.
+            navigate("/Homelogedin");
+        } catch (error) {
+            console.error("Fel vid registrering av timmar:", error);
+            setError("Något blev fel vid registrering av dina timmar.");
+        }
+    };
+
+    // Om selectedDate inte är valt, visa ett fallback-meddelande
+    if (!selectedDate) {
+        return <div>Inget datum valt</div>;
+    }
 
     return (
         <div>
             <h3>Valt datum: År: {year}, Månad: {month}, Dag: {day}</h3>
+            <h2>Fyll i ditt arbetspass:</h2>
+            <form onSubmit={handleInkomster}>
+                <div>
+                    <label>Antal timmar:</label>
+                    <input
+                        type="text"
+                        value={hours}
+                        onChange={(e) => setHours(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Timlön i kr:</label>
+                    <input
+                        type="text"
+                        value={hourlyRate}
+                        onChange={(e) => setHourlyRate(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Semesterersättning i procent:</label>
+                    <input
+                        type="text"
+                        value={vacationPay}
+                        onChange={(e) => setVacationPay(e.target.value)}
+                    />
+                </div>
+                <button type="submit">Skicka</button>
+            </form>
+            {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
     );
 };
 
 export default AddHours;
-
