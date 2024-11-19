@@ -1,81 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import Modal from 'react-modal';
 import HourService from "./HourService";
+import './Modal.css';
+import Calendar from "./calendar";
 
-const DeleteHour = () => {
-    // Tar in datumet från kalendern.
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const selectedDateStr = params.get('selectedDate');
-    const selectedDate = selectedDateStr ? new Date(selectedDateStr) : null;
+Modal.setAppElement('#root');
 
-    // Tillståndsvariabler för att spara inputvärden och datumets komponenter
+const DeleteHour = ({ show, onClose, onDelete, date, refreshCalendar }) => {
     const [error, setError] = useState(null);
-    const [year, setYear] = useState(null); // Nytt tillstånd för år
-    const [month, setMonth] = useState(null); // Nytt tillstånd för månad
-    const [day, setDay] = useState(null); // Nytt tillstånd för dag
-    const navigate = useNavigate();
-//ruta för att fråga om användaren verkligen vill radera.
-    const [showPopup, setShowPopup] = useState(false);
-    // Kontroll för om datum är valt
+
     useEffect(() => {
-        if (selectedDate) {
-            setYear(selectedDate.getFullYear());
-            setMonth(selectedDate.getMonth() + 1); // Månader är 0-indexerade
-            setDay(selectedDate.getDate());
+        if (show) {
+            console.log('Modal is open for date:', date);
         }
-    }, [selectedDate]);
+    }, [show, date]);
 
-    // Funktion för att öppna popup-rutan
-    const handleDeleteClick = () => {
-        setShowPopup(true);
-    };
-    // Funktion för att hantera bekräftelse av radering
-    const confirmDelete = () => {
-        handleInkomster();
-        setShowPopup(false);
-        // Lägg till din raderingslogik här, t.ex., anropa en API-funktion för att radera
-        console.log("Elementet har raderats");
-    };
-
-    // Funktion för att stänga popup-rutan
-    const cancelDelete = () => {
-        setShowPopup(false);
-    };
-
-    // Kallar på metoden som skickar timmarna till API:et.
-    const handleInkomster = async () => {
+    const confirmDelete = async () => {
         try {
-            const response = await HourService.deleteHour(year, month, day);
-            console.log("Raderign av timmar fungerade:", response);
-            setError(null);
-            //tillbaka till hemsidan när registreringen är klar.
-            navigate("/Homelogedin");
+            if (!date) {
+                setError('Inget datum valdes.');
+                return;
+            }
+
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+
+            await HourService.deleteHour(year, month, day);
+            refreshCalendar();
+           // onDelete();  // För att uppdatera föräldern när raderingen är klar
+            onClose();   // Stänger modalen
+
         } catch (error) {
+            setError('Något gick fel vid raderingen.');
             console.error("Fel vid radering av timmar:", error);
-            setError("Något blev fel vid raderingen av dina timmar.");
         }
     };
-
-    // Om selectedDate inte är valt, visa ett fallback-meddelande
-    if (!selectedDate) {
-        return <div>Inget datum valt</div>;
-    }
 
     return (
-        <div>
-            <button onClick={handleDeleteClick}>Radera</button>
-
-            {showPopup && (
-                <div className="popup-overlay">
-                    <div className="popup">
-                        <p>Är du säker på att du vill radera?</p>
-                        <button onClick={confirmDelete}>Ja</button>
-                        <button onClick={cancelDelete}>Nej</button>
-                    </div>
-                </div>
-            )}
-        </div>
+        <Modal isOpen={show} onRequestClose={onClose} contentLabel="Bekräfta Radering">
+            <h2>Bekräfta Radering</h2>
+            <p>Är du säker på att du vill radera timmarna för {date?.toLocaleDateString()}?</p>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div>
+                <button onClick={confirmDelete}>Ja</button>
+                <button onClick={onClose}>Nej</button>
+            </div>
+        </Modal>
     );
 };
 

@@ -1,33 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import HourService from "./HourService";
+import React, { useState, useEffect } from 'react';
+import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
+import HourService from './HourService';
+import './Modal.css';
 
-const AddHours = () => {
-    // Tar in datumet från kalendern.
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const selectedDateStr = params.get('selectedDate');
-    const selectedDate = selectedDateStr ? new Date(selectedDateStr) : null;
+Modal.setAppElement('#root');
 
-    // Tillståndsvariabler för att spara inputvärden och datumets komponenter
+const AddHours = ({ show, onClose, date, refreshCalendar }) => {
     const [hours, setHours] = useState("");
-    const [date, setDate] = useState("");
     const [hourlyRate, setHourlyRate] = useState("");
     const [vacationPay, setVacationPay] = useState("");
     const [error, setError] = useState(null);
-    const [year, setYear] = useState(null); // Nytt tillstånd för år
-    const [month, setMonth] = useState(null); // Nytt tillstånd för månad
-    const [day, setDay] = useState(null); // Nytt tillstånd för dag
+    const [year, setYear] = useState(null);
+    const [month, setMonth] = useState(null);
+    const [day, setDay] = useState(null);
     const navigate = useNavigate();
 
     // Kontroll för om datum är valt
     useEffect(() => {
-        if (selectedDate) {
-            setYear(selectedDate.getFullYear());
-            setMonth(selectedDate.getMonth() + 1); // Månader är 0-indexerade
-            setDay(selectedDate.getDate());
+        if (date) {
+            setYear(date.getFullYear());
+            setMonth(date.getMonth() + 1); // Månader är 0-indexerade
+            setDay(date.getDate());
         }
-    }, [selectedDate]);
+    }, [date]);
 
     // Kallar på metoden som skickar timmarna till API:et.
     const handleInkomster = async (e) => {
@@ -36,7 +32,8 @@ const AddHours = () => {
             const response = await HourService.addHours(hours, month, day, year, hourlyRate, vacationPay);
             console.log("Registrering av timmar fungerade:", response);
             setError(null);
-            //tillbaka till hemsidan när registreringen är klar.
+            onClose(); // Stänger modalen när registreringen är klar.
+            refreshCalendar(); // Uppdaterar kalendern
             navigate("/Homelogedin");
         } catch (error) {
             console.error("Fel vid registrering av timmar:", error);
@@ -44,13 +41,13 @@ const AddHours = () => {
         }
     };
 
-    // Om selectedDate inte är valt, visa ett fallback-meddelande
-    if (!selectedDate) {
+    // Om inget datum är valt
+    if (!date) {
         return <div>Inget datum valt</div>;
     }
 
     return (
-        <div>
+        <Modal isOpen={show} onRequestClose={onClose} contentLabel="Lägg till timmar">
             <h3>Valt datum: År: {year}, Månad: {month}, Dag: {day}</h3>
             <h2>Fyll i ditt arbetspass:</h2>
             <form onSubmit={handleInkomster}>
@@ -81,8 +78,9 @@ const AddHours = () => {
                 </div>
                 <button type="submit">Skicka</button>
             </form>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-        </div>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <button onClick={onClose}>Stäng</button>
+        </Modal>
     );
 };
 

@@ -4,7 +4,9 @@ import 'react-calendar/dist/Calendar.css';
 import HourService from "./HourService";
 import { Dropdown, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import DeleteHour from './DeleteHour'; // Importera DeleteHour-komponenten
 import './dot.css';
+import AddHours from "./AddHours";
 
 const Customcalendar = () => {
     const [date, setDate] = useState(new Date());
@@ -14,6 +16,10 @@ const Customcalendar = () => {
     const [menuVisible, setMenuVisible] = useState(false);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const menuRef = useRef(null);
+   // const [showModal, setShowModal] = useState(false);  // Hantera visning av modalen
+    const [modalDate, setModalDate] = useState(null);  // För att hålla koll på datumet för radering
+    const [showAddModal, setShowAddModal] = useState(false);  // För "Lägg till timmar"-modalen
+    const [showDeleteModal, setShowDeleteModal] = useState(false);  // För "Radera timmar"-modalen
 
     const [todayHours, setTodayHours] = useState(null);
     const [monthlyIncome, setMonthlyIncome] = useState(null);
@@ -24,10 +30,19 @@ const Customcalendar = () => {
         setDate(selectedDate);
         setMenuPosition({ x: event.clientX, y: event.clientY });
         setMenuVisible(true);
+
+        // Sätt det valda datumet för radering
+        setModalDate(selectedDate);
     };
 
     const closeMenu = () => {
         setMenuVisible(false);
+    };
+
+    //för modalerna
+    const closeModals = () => {
+        setShowAddModal(false);
+        setShowDeleteModal(false);
     };
 
     useEffect(() => {
@@ -118,7 +133,6 @@ const Customcalendar = () => {
         }
     };
 
-
     const tileClassName = ({ date, view }) => {
         if (view === 'month') {
             const isRegistered = allDates.some((allDate) => {
@@ -139,6 +153,15 @@ const Customcalendar = () => {
             return isRegistered ? <span className="dot"></span> : null;
         }
         return null;
+    };
+    const refreshCalendar = async () => {
+        // Uppdatera alla timmar efter raderingen
+        const response = await HourService.fetchAllHours();
+        setAllDates(response.map((workedHour) => ({
+            year: workedHour.year,
+            month: workedHour.month,
+            date: workedHour.date,
+        })));
     };
 
     return (
@@ -172,19 +195,35 @@ const Customcalendar = () => {
                     }}
                 >
                     <Dropdown.Menu show>
-                        <Dropdown.Item as={Link} to={`/addHours?selectedDate=${date.toISOString()}`}>
+                        <Dropdown.Item as="button" onClick={() => setShowAddModal(true)}>
                             Lägg till timmar
                         </Dropdown.Item>
                         <Dropdown.Item as={Link} to={`/updateHours?selectedDate=${date.toISOString()}`}>
                             Ändra timmar
                         </Dropdown.Item>
-                        <Dropdown.Item as={Link} to={`/deleteHour?selectedDate=${date.toISOString()}`}>
+                        {/* Radera timmar-knappen */}
+                        <Dropdown.Item as="button" onClick={() => setShowDeleteModal(true)}>
                             Radera timmar
                         </Dropdown.Item>
                     </Dropdown.Menu>
                     <Button variant="secondary" onClick={closeMenu}>Stäng</Button>
                 </div>
             )}
+
+            {/* Skicka med rätt datum till DeleteHour */}
+            {/* Visa rätt modal baserat på state */}
+            <AddHours
+                show={showAddModal}
+                onClose={closeModals}
+                date={modalDate}
+                refreshCalendar={refreshCalendar}
+            />
+            <DeleteHour
+                show={showDeleteModal}
+                onClose={closeModals}
+                date={modalDate}
+                refreshCalendar={refreshCalendar}
+            />
 
             <div className="info-box">
                 <h3>Dagens timmar: {todayHours !== null ? todayHours : "Laddar..."}</h3>
@@ -196,4 +235,3 @@ const Customcalendar = () => {
 };
 
 export default Customcalendar;
-
