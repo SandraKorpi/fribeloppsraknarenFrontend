@@ -34,7 +34,6 @@ const AddHours = ({ show, onClose, date, refreshCalendar }) => {
             setError(null);
             onClose(); // Stänger modalen när registreringen är klar.
             refreshCalendar(); // Uppdaterar kalendern
-            navigate("/Homelogedin");
         } catch (error) {
             console.error("Fel vid registrering av timmar:", error);
             setError("Något blev fel vid registrering av dina timmar.");

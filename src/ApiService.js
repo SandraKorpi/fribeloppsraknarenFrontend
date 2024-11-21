@@ -182,6 +182,20 @@ const getSemesterIncome = async (year, semester) => {
         throw new Error("Det gick inte att hämta semesterinkomst.");
     }
 
+}
+const compareSemesterIncome = async (year, semesterType) => {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${API_URL}/api/worked-hours/compare-income/${year}/${semesterType}`, {
+            headers: {
+                Authorization: `Bearer ${token}` // Skicka med token för autentisering
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Fel vid hämtning av compareincome", error);
+        throw error;
+    }
 };
 
 export default {
@@ -195,5 +209,6 @@ export default {
     getOneHour,
     getPayForMonth,
     updateHour,
-    getSemesterIncome
+    getSemesterIncome,
+    compareSemesterIncome
 };

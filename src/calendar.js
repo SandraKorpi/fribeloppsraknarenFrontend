@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import DeleteHour from './DeleteHour'; // Importera DeleteHour-komponenten
 import './dot.css';
 import AddHours from "./AddHours";
+import UpdateHours from "./UpdateHours";
 
 const Customcalendar = () => {
     const [date, setDate] = useState(new Date());
@@ -20,10 +21,11 @@ const Customcalendar = () => {
     const [modalDate, setModalDate] = useState(null);  // För att hålla koll på datumet för radering
     const [showAddModal, setShowAddModal] = useState(false);  // För "Lägg till timmar"-modalen
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // För "Radera timmar"-modalen
-
+const [showUpdateModal, setShowUpdateModal] = useState(false); //updatera-modalen
     const [todayHours, setTodayHours] = useState(null);
     const [monthlyIncome, setMonthlyIncome] = useState(null);
     const [termIncome, setTermIncome] = useState(null);
+    const [compareSemesterIncome, setCompareSemesterIncome] = useState(null);
 
     const handleDayClick = (selectedDate, event) => {
         event.preventDefault();
@@ -43,6 +45,7 @@ const Customcalendar = () => {
     const closeModals = () => {
         setShowAddModal(false);
         setShowDeleteModal(false);
+        setShowUpdateModal(false);
     };
 
     useEffect(() => {
@@ -78,6 +81,7 @@ const Customcalendar = () => {
         const currentMonth = date.getMonth() + 1;
         fetchIncome(currentYear, currentMonth);
         fetchSemesterIncome(currentYear, currentMonth);
+        fetchCompareIncomeSemester(currentYear, currentMonth);
     }, []);
 
     useEffect(() => {
@@ -111,8 +115,10 @@ const Customcalendar = () => {
     const handleMonthChange = ({ activeStartDate }) => {
         const year = activeStartDate.getFullYear();
         const month = activeStartDate.getMonth() + 1;
+        //Så att informationen byts baserat på när användaren bläddrar i kalendern.
         fetchIncome(year, month);
         fetchSemesterIncome(year, month);
+        fetchCompareIncomeSemester(year, month)
     };
 
     const fetchSemesterIncome = async (year, month) => {
@@ -123,7 +129,15 @@ const Customcalendar = () => {
             console.error("Fel vid hämtning av terminsinkomst: ", error);
         }
     };
+const fetchCompareIncomeSemester = async (year, month) => {
+    try {
+        const response = await HourService.compareSemesterIncome(year, month);
+        setCompareSemesterIncome(response);
 
+    } catch (error) {
+        console.error("Fel vid hämtning av terminsinkomst: ", error);
+    }
+}
     const showOneHour = async (year, month, day) => {
         try {
             const storedData = await HourService.getOneHour(year, month, day);
@@ -162,6 +176,13 @@ const Customcalendar = () => {
             month: workedHour.month,
             date: workedHour.date,
         })));
+        // Uppdatera inkomster vid varje ändring.
+        const currentYear = date.getFullYear();
+        const currentMonth = date.getMonth() + 1;
+        fetchIncome(currentYear, currentMonth); // Månadens inkomst
+        fetchSemesterIncome(currentYear, currentMonth); // Terminsinkomst
+        fetchCompareIncomeSemester(currentYear, currentMonth); // Jämför terminsinkomst
+
     };
 
     return (
@@ -188,21 +209,28 @@ const Customcalendar = () => {
                         position: "absolute",
                         top: menuPosition.y,
                         left: menuPosition.x,
-                        backgroundColor: "white",
-                        border: "1px solid gray",
-                        padding: "10px",
                         zIndex: 1000,
                     }}
                 >
                     <Dropdown.Menu show>
-                        <Dropdown.Item as="button" onClick={() => setShowAddModal(true)}>
+                        <Dropdown.Item as="button"           onClick={() => {
+                            closeMenu(); // Stänger menyn
+                            setShowAddModal(true); // Visar AddHours-modal
+                        }}
+                        >
                             Lägg till timmar
                         </Dropdown.Item>
-                        <Dropdown.Item as={Link} to={`/updateHours?selectedDate=${date.toISOString()}`}>
+                        <Dropdown.Item as="button"           onClick={() => {
+                            closeMenu(); // Stänger menyn
+                            setShowUpdateModal(true); // Visar AddHours-modal
+                        }}
+                        >
                             Ändra timmar
                         </Dropdown.Item>
                         {/* Radera timmar-knappen */}
-                        <Dropdown.Item as="button" onClick={() => setShowDeleteModal(true)}>
+                        <Dropdown.Item as="button" onClick={() =>{
+                            closeMenu();
+                            setShowDeleteModal(true)}}>
                             Radera timmar
                         </Dropdown.Item>
                     </Dropdown.Menu>
@@ -224,11 +252,18 @@ const Customcalendar = () => {
                 date={modalDate}
                 refreshCalendar={refreshCalendar}
             />
+            <UpdateHours
+                show={showUpdateModal}
+                onClose={closeModals}
+                date={modalDate}
+                refreshCalendar={refreshCalendar}
+            />
 
             <div className="info-box">
                 <h3>Dagens timmar: {todayHours !== null ? todayHours : "Laddar..."}</h3>
                 <p>Månadens inkomst: {monthlyIncome !== null ? monthlyIncome : "Laddar..."}</p>
                 <p>Terminens inkomst: {termIncome !== null ? termIncome : "Laddar..."}</p>
+                <p> {compareSemesterIncome !== null ? compareSemesterIncome : "Laddar..."}</p>
             </div>
         </div>
     );

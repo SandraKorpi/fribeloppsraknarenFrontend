@@ -6,7 +6,7 @@ import Calendar from "./calendar";
 
 Modal.setAppElement('#root');
 
-const DeleteHour = ({ show, onClose, onDelete, date, refreshCalendar }) => {
+const DeleteHour = ({ show, onClose, date, refreshCalendar }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -45,6 +45,7 @@ const DeleteHour = ({ show, onClose, onDelete, date, refreshCalendar }) => {
             <div>
                 <button onClick={confirmDelete}>Ja</button>
                 <button onClick={onClose}>Nej</button>
+                <button onClick={onClose}>Stäng</button>
             </div>
         </Modal>
     );

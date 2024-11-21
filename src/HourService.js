@@ -78,7 +78,25 @@ const HourService = {
         } catch (error) {
             console.log(`Sending semester: ${semester}`);
             throw new Error("Det gick inte att hämta terminens inkomster");
-        }}
+        }},
+
+    async compareSemesterIncome (year, month){
+    //let ist för const för att kunna ändra variabeln.
+    let semester;
+    // Bestäm vilken termin baserat på månaden
+    if (month >= 1 && month <= 6) {
+    semester = "VT";
+} else if (month >= 7 && month <= 12) {
+    semester = "HT";
+} else {
+    throw new Error("Ogiltig månad");
+}
+        try {
+            console.log(`Hämtar från apiet`);
+            return await ApiService.compareSemesterIncome(year, semester);
+        } catch (error) {
+            throw new Error("Det gick inte att hämta terminens inkomster");
+        }},
 };
 
 
