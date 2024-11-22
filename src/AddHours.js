@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import HourService from './HourService';
 import './Modal.css';
+import './buttom.css'
 
 Modal.setAppElement('#root');
 
@@ -46,7 +47,7 @@ const AddHours = ({ show, onClose, date, refreshCalendar }) => {
     }
 
     return (
-        <Modal isOpen={show} onRequestClose={onClose} contentLabel="Lägg till timmar">
+        <Modal isOpen={show} onRequestClose={onClose} contentLabel="Lägg till timmar" classname="modal-content">
             <h3>Valt datum: År: {year}, Månad: {month}, Dag: {day}</h3>
             <h2>Fyll i ditt arbetspass:</h2>
             <form onSubmit={handleInkomster}>
@@ -75,10 +76,10 @@ const AddHours = ({ show, onClose, date, refreshCalendar }) => {
                         onChange={(e) => setVacationPay(e.target.value)}
                     />
                 </div>
-                <button type="submit">Skicka</button>
+                <button className="primary-button" type="submit">Skicka</button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <button onClick={onClose}>Stäng</button>
+            <button className="primary-button" onClick={onClose}>Stäng</button>
         </Modal>
     );
 };

@@ -43,9 +43,9 @@ const DeleteHour = ({ show, onClose, date, refreshCalendar }) => {
             <p>Är du säker på att du vill radera timmarna för {date?.toLocaleDateString()}?</p>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
-                <button onClick={confirmDelete}>Ja</button>
-                <button onClick={onClose}>Nej</button>
-                <button onClick={onClose}>Stäng</button>
+                <button className="primary-button" onClick={confirmDelete}>Ja</button>
+                <button className="primary-button" onClick={onClose}>Nej</button>
+                <button className="primary-button" onClick={onClose}>Stäng</button>
             </div>
         </Modal>
     );

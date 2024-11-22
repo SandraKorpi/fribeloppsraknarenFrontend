@@ -8,7 +8,7 @@ import DeleteHour from './DeleteHour'; // Importera DeleteHour-komponenten
 import './dot.css';
 import AddHours from "./AddHours";
 import UpdateHours from "./UpdateHours";
-
+import './Calendar.css';
 const Customcalendar = () => {
     const [date, setDate] = useState(new Date());
     const [error, setError] = useState(null);

@@ -1,0 +1,75 @@
+/* Definiera bakgrundsgradienten för hela sidan */
+body {
+    background: #b6e7ea; /* Fallback-färg */
+    background: #b6e7ea;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Se till att bakgrunden täcker hela fönstret */
+}
+
+/* Header styles */
+.header {
+    background: rgb(15,180,187);
+    background: radial-gradient(circle, rgba(15,180,187,1) 0%, rgba(9,110,113,1) 100%);
+    color: #feefc4; /* Textfärg */
+    padding: 10px 0; /* Vertikal padding */
+    font-family: 'Alex Brush', sans-serif; /* Font-stil */
+    font-size: 18px; /* Fontstorlek */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Skugga under header */
+}
+
+.header a.navbar-brand {
+    color: #feefc4; /* Färg för "Fribelopps-räknaren" */
+    text-transform: uppercase; /* Gör texten till versaler */
+    font-weight: bold; /* Fetstil */
+    transition: color 0.3s ease; /* Smidig övergång vid hover */
+}
+
+.header a.navbar-brand:hover {
+    color: #ffffff; /* Ändra färg vid hover */
+}
+
+.header .navbar-nav .nav-link {
+    color: #cccccc; /* Standardfärg för meny-länkar */
+}
+
+.header .navbar-nav .nav-link:hover {
+    color: #ffffff; /* Färg vid hover */
+}
+
+
+/* Footer styles */
+.footer {
+    background-color: #0fb4bb; /* Bakgrundsfärg (kan justeras) */
+    color: #ffffff; /* Textfärg */
+    text-align: center;
+    padding: 15px 0; /* Vertikal padding */
+    font-family: 'Arial', sans-serif; /* Ändra till ditt önskade typsnitt */
+    font-size: 14px; /* Textstorlek */
+}
+
+.footer small {
+    color: #fec413; /* Färg för mindre text */
+}
+
+.footer small:hover {
+    color: #ffffff; /* Färg vid hover */
+}
+
+
+.info-box {
+    display: inline-flex;
+    border: 2px solid #49416d;
+    background-color: #feefc4; /* Bakgrundsfärg (kan justeras) */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.container {
+    justify-content: center;
+    margin: 15px;
+}
+
+

@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #437864;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,6 +28,16 @@
   color: #61dafb;
 }
 
+/* Definiera bakgrundsgradienten för hela sidan */
+body {
+  backgroundColor: rgb(238, 174, 202);
+  background: rgb(238, 174, 202);
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* Se till att bakgrunden täcker hela fönstret */
+}
+
+/* Definiera animation för App-logo */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +46,4 @@
     transform: rotate(360deg);
   }
 }
+

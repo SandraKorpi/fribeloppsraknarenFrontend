@@ -3,6 +3,8 @@ import React from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Seinkomster from './Seinkomster';
+
 
 const MenuNav = [
     {

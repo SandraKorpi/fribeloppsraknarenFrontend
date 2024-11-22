@@ -1,0 +1,18 @@
+.primary-button {
+
+        background-color: #e0e0e0;
+        border-radius: 0px;
+        box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
+        color: #4d4d4d;
+        cursor: pointer;
+        font-size: 18px;
+    margin: 5px;
+        padding: 5px 12px;
+        transition: all 0.2s ease-in-out;
+        border: 2px solid rgb(206, 206, 206);
+    }
+
+button:active {
+    color: #666;
+    box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff; /* Behåller "tryckt" effekt */
+}

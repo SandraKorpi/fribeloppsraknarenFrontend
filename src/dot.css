@@ -9,6 +9,6 @@
     transform: translateX(-50%);
     width: 6px;
     height: 6px;
-    background-color: red; /* Eller den färg du vill ha */
+    background-color: #ffc413;
     border-radius: 50%;
 }

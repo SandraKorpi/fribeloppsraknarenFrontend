@@ -65,7 +65,7 @@ function RegisterUser() {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit" className="w-100">
+                        <Button variant="primary" type="submit" className="primart-button">
                             Registrera
                         </Button>
                     </Form>

@@ -5,7 +5,7 @@ import MenuNav from "./MenuNav";
 
 function Header() {
     return (
-        <Navbar bg="dark" variant="dark" expand="lg">
+        <Navbar className="header" expand="lg">
             <Container>
                 <Navbar.Brand href="#">Fribelopps-räknaren</Navbar.Brand>
                 <MenuNav/>
