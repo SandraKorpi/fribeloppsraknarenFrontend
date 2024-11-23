@@ -122,6 +122,22 @@ const getPayForMonth = async (year, month) => {
     }
 };
 
+const getWorkedHoursDetails = async (year, month) => {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${API_URL}/api/worked-hours/worked-hours-details/${year}/${month}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log("API svar:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Fel vid hämtning av detaljer för arbetade timmar", error);
+        throw new Error("Det gick inte att hämta detaljer om arbetade timmar");
+    }
+};
+
 //api-anrop för att radera en timme.
 const deleteHour = async ( year, month, date) =>{
     try {
@@ -210,5 +226,6 @@ export default {
     getPayForMonth,
     updateHour,
     getSemesterIncome,
-    compareSemesterIncome
+    compareSemesterIncome,
+    getWorkedHoursDetails
 };

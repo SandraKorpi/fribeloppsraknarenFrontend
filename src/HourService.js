@@ -25,7 +25,14 @@ const HourService = {
             throw new Error("Fel vid hämtning av månadsinkomst.");
         }
     },
-
+    async getWorkedHoursDetails(year, month) {
+        try {
+            const response = await ApiService.getWorkedHoursDetails(year, month); // Anropa den asynkrona metoden från ApiService
+            return response;
+        } catch (error) {
+            throw new Error("Det gick inte att hämta detaljer om arbetade timmar");
+        }
+    },
     async fetchAllHours() {
         const token = localStorage.getItem("token");
         try {
@@ -76,6 +83,7 @@ const HourService = {
             throw new Error("Det gick inte att hämta registrerade timmar");
         }
     },
+
 
     async updateHour (hours, month, date, year, hourlyRate, vacationPay)
     {

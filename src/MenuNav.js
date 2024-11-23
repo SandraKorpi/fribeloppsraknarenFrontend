@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import './Main.css'
 
 const MenuNav = [
     {
@@ -19,7 +20,7 @@ const MenuNav = [
 
 function Navigation() {
     return (
-        <Navbar expand="lg" bg="dark" variant="dark" className="px-3">
+        <Navbar expand="lg" className="custom-navbar">
             {/* Toggle-knapp och hamburgermeny */}
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

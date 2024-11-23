@@ -1,0 +1,9 @@
+/* För att centrera endast själva innehållet (utan header och footer) */
+.main-content-wrapper {
+    display: flex;
+    flex-direction: column;  /* Stapla elementen vertikalt */
+    justify-content: flex-start; /* Börja från toppen */
+    align-items: center; /* Centrerar horisontellt */
+    min-height: calc(100vh - 100px); /* Se till att innehållet inte täcker headern eller footern, justera om headern/footer är högre än 100px */
+    padding: 20px;
+}

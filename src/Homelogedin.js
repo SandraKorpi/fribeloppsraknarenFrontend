@@ -10,7 +10,9 @@ const Homelogedin = () => {
         <div>
             <h1>Välkommen till Mina Sidor</h1>
             <p>Här kan du se och hantera ditt innehåll.</p>
-            <Calendar/>
+            <div className="centered-calendar">
+                <Calendar/>
+            </div>
         </div>
     );
 };
