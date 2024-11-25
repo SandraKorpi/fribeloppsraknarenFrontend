@@ -9,8 +9,8 @@ const MenuNav = [
         url: "/Homelogedin",
     },
     {
-        label: "Hantera inkomster",
-        url: "/hanterainkomster",
+        label: "Mina sidor",
+        url: "/MinaSidor",
     },
     {
         label: "Se inkomster",

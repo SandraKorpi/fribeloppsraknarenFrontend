@@ -22,17 +22,19 @@ body.active-modal {
 .overlay {
     background: rgba(49,49,49,0.8);
 }
+
 .modal-content {
     position: absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     line-height: 1.4;
-    background: #49416d;
+    background: white; /* Sätt bakgrundsfärgen till vit */
     padding: 14px 28px;
     border-radius: 3px;
     max-width: 600px;
     min-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Lägg till skugga för att ge ett lyft */
 }
 
 .close-modal {

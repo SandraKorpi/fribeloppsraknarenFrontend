@@ -212,6 +212,43 @@ const compareSemesterIncome = async (year, semesterType) => {
         console.error("Fel vid hämtning av compareincome", error);
         throw error;
     }
+}
+const getUserForUser = async () => {
+    try {
+        // Hämta token från localStorage
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            throw new Error("Token saknas.");
+        }
+        const response = await axios.get(`${API_URL}/api/users/getUser`, {
+            headers: {
+                Authorization: `Bearer ${token}`, }
+        });
+        console.log("Hämtad användare:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Fel vid hämtning av användare:", error.response ? error.response.data : error.message);
+        throw new Error("Det gick inte att hämta användaren.");
+    }}
+
+const updateUser = async (userDto) => {
+    try {
+        const token = localStorage.getItem("token");
+        const userId = extractUserIdFromToken(token); // Extrahera användarens ID från token
+        if (!userId) throw new Error("Användar-ID kunde inte hittas i token.");
+
+        const response = await axios.put(`${API_URL}/api/users/${userId}`, userDto, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log("Uppdaterad användare:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Fel vid uppdatering av användare:", error.response ? error.response.data : error.message);
+        throw new Error("Det gick inte att uppdatera användaren.");
+    }
 };
 
 export default {
@@ -227,5 +264,7 @@ export default {
     updateHour,
     getSemesterIncome,
     compareSemesterIncome,
-    getWorkedHoursDetails
+    getWorkedHoursDetails,
+    getUserForUser,
+    updateUser
 };

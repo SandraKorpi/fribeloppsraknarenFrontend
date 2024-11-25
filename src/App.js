@@ -13,6 +13,7 @@ import Calendar from './calendar'; // Lägg till Calendar-komponenten här
 import './App.css'; // eller motsvarande fil
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Seinkomster from './Seinkomster';
+import MinaSidor from "./MinaSidor";
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
                     <Route path="/updateHours" element={<UpdateHours />} />
                     <Route path="/deleteHour" element={<DeleteHour />} />
                     <Route path="/seinkomster" element={<Seinkomster />} />
-                    <Route path="/HanteraInkomster" element={<Hantera />} />
+                    <Route path="/MinaSidor" element={<MinaSidor />} />
                 </Routes>
 
                 {/* Footer visas på varje sida */}

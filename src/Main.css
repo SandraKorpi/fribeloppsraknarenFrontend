@@ -1,6 +1,6 @@
 /* Bakgrundsgradient för hela sidan */
 body {
-    background: #F5F5F5;
+    background: #ffffff;
     margin: 0;
     padding: 0;
     height: 100vh; /* Se till att bakgrunden täcker hela fönstret */
@@ -59,11 +59,31 @@ body {
     color: #ffffff; /* Färg vid hover */
 }
 
+.Home-container{
+    display: flex;
+    flex-direction: column; /* Vertikal stapling */
+    justify-content: flex-start; /* Börjar från toppen */
+    align-items: center; /* Centrerar innehåll horisontellt */
+    gap: 10px; /* Avstånd mellan boxarna */
+    padding: 20px; /* Avstånd inuti containern */
+}
+
 
 /* Info-box med justering av innehåll */
 .info-box {
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     background-color: #ffffff; /* Bakgrundsfärg (kan justeras) */
+
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+.info-text{
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -77,6 +97,8 @@ body {
 
 .container {
     justify-content: center;
+    display: flex;
+    flex-direction: column;
     margin: 15px;
 }
 
@@ -85,7 +107,12 @@ body {
     display: flex;
     justify-content: center;  /* Horisontellt centrerad */
     align-items: center;      /* Vertikalt centrerad */
-    height: 100vh;            /* Se till att föräldern täcker hela höjden på sidan */
+    height: auto;            /* Se till att föräldern täcker hela höjden på sidan */
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+}
+
+
+.footer {
+    position: relative;
 }

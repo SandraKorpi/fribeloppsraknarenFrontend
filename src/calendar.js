@@ -207,10 +207,15 @@ const fetchCompareIncomeSemester = async (year, month) => {
                     ref={menuRef}
                     className="context-menu"
                     style={{
-                        position: "absolute",
+                      /*  position: "absolute",
                         top: menuPosition.y,
                         left: menuPosition.x,
-                        zIndex: 1000,
+                        zIndex: 1000, */
+                        position: "fixed", // Fixerat till skärmen
+                        top: "50%",        // Vertikalt centrerad
+                        left: "50%",       // Horisontellt centrerad
+                        transform: "translate(-50%, -50%)", // Flytta tillbaka hälften av bredden/höjden
+                        zIndex: 1000,      // Håll den över andra element
                     }}
                 >
                     <Dropdown.Menu show>
