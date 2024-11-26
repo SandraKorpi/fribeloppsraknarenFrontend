@@ -24,6 +24,25 @@ const extractUserIdFromToken = (token) => {
     return jsonPayload.userId; // Eller använd det fält som innehåller användar-ID
 };
 
+//Metod för att kontrollera om användaren har en token som är giltig.
+const isAuthenticated = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
+    try {
+        const payload = token.split('.')[1];
+        const decodedPayload = atob(payload);
+        const jsonPayload = JSON.parse(decodedPayload);
+
+        // Kontrollera om token har gått ut
+        const currentTime = Math.floor(Date.now() / 1000); // Nuvarande tid i sekunder
+        return jsonPayload.exp > currentTime; // Token är giltig om utgångstiden är i framtiden
+    } catch (error) {
+        console.error("Fel vid kontroll av autentisering:", error);
+        return false;
+    }
+};
+
 // api-anrop för att logga in och hämta JWT-token
 const login = async (userName, password) => {
     const response = await axios.post(`${API_URL}/api/auth/signIn`, { userName, password });
@@ -31,6 +50,13 @@ const login = async (userName, password) => {
     setAuthToken(token);
     localStorage.setItem("token", token); // Spara token lokalt för framtida anrop
     return response.data;
+};
+
+//Tar bort token och skickar användaren till login sidan vid utlogg.
+const logout = () => {
+    localStorage.removeItem("token");
+    setAuthToken(null);
+    window.location.href = "/";
 };
 
 //api-anrop för att regga användare
@@ -266,5 +292,7 @@ export default {
     compareSemesterIncome,
     getWorkedHoursDetails,
     getUserForUser,
-    updateUser
+    updateUser,
+    logout,
+    isAuthenticated
 };

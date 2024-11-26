@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import RegisterUser from './RegisterUser';
-import Homelogedin from "./Homelogedin";
+import Homelogedin from './Homelogedin';
 import Header from './Header';
 import Footer from './Footer';
-import AddHours from "./AddHours";
-import UpdateHours from "./UpdateHours";
-import DeleteHour from "./DeleteHour";
-import Hantera from "./Hantera";
-import Calendar from './calendar'; // Lägg till Calendar-komponenten här
-import './App.css'; // eller motsvarande fil
-import 'bootstrap/dist/css/bootstrap.min.css';
+import AddHours from './AddHours';
+import UpdateHours from './UpdateHours';
+import DeleteHour from './DeleteHour';
 import Seinkomster from './Seinkomster';
-import MinaSidor from "./MinaSidor";
+import MinaSidor from './MinaSidor';
+import PrivateRoute from './PrivateRoute'; // Importera PrivateRoute-komponenten
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-
     return (
         <Router>
             <div>
@@ -25,14 +23,59 @@ function App() {
 
                 {/* Definiera sidans innehåll baserat på URL */}
                 <Routes>
+                    {/* Offentliga sidor */}
                     <Route path="/" element={<Login />} />
                     <Route path="/register" element={<RegisterUser />} />
-                    <Route path="/homelogedin" element={<Homelogedin />} />
-                    <Route path="/addHours" element={<AddHours />} />
-                    <Route path="/updateHours" element={<UpdateHours />} />
-                    <Route path="/deleteHour" element={<DeleteHour />} />
-                    <Route path="/seinkomster" element={<Seinkomster />} />
-                    <Route path="/MinaSidor" element={<MinaSidor />} />
+
+                    {/* Privata sidor */}
+                    <Route
+                        path="/homelogedin"
+                        element={
+                            <PrivateRoute>
+                                <Homelogedin />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/addHours"
+                        element={
+                            <PrivateRoute>
+                                <AddHours />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/updateHours"
+                        element={
+                            <PrivateRoute>
+                                <UpdateHours />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/deleteHour"
+                        element={
+                            <PrivateRoute>
+                                <DeleteHour />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/seinkomster"
+                        element={
+                            <PrivateRoute>
+                                <Seinkomster />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/MinaSidor"
+                        element={
+                            <PrivateRoute>
+                                <MinaSidor />
+                            </PrivateRoute>
+                        }
+                    />
                 </Routes>
 
                 {/* Footer visas på varje sida */}
@@ -43,4 +86,5 @@ function App() {
 }
 
 export default App;
+
 
