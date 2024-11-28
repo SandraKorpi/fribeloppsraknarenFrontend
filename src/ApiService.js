@@ -276,6 +276,36 @@ const updateUser = async (userDto) => {
         throw new Error("Det gick inte att uppdatera användaren.");
     }
 };
+const changePassword = async (currentPassword, newPassword, confirmPassword) => {
+    try {
+        // Logga de värden som skickas
+        console.log(`Current Passwordapi: '${currentPassword}'`);
+        console.log(`New Password: '${newPassword}'`);
+        console.log(`Confirm Password: '${confirmPassword}'`);
+
+        if (newPassword !== confirmPassword) {
+            throw new Error("De nya lösenorden matchar inte.");
+        }
+
+        // Skapa DTO med korrekt struktur
+        const changePasswordDto = {
+            currentPassword: currentPassword,  // Detta är nuvarande lösenord
+            newPassword: newPassword,  // Detta är nya lösenordet
+            confirmPassword: confirmPassword // Bekräftelse av nya lösenordet
+        };
+
+        // Skicka PUT-förfrågan till backend
+        const response = await axios.put(`${API_URL}/api/auth/change-password`, changePasswordDto, {
+        });
+
+        console.log("Lösenord ändrat framgångsrikt:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Fel vid ändring av lösenord:", error.response ? error.response.data : error.message);
+        throw new Error("Det gick inte att ändra lösenordet.");
+    }
+};
+
 
 export default {
     login,
@@ -294,5 +324,6 @@ export default {
     getUserForUser,
     updateUser,
     logout,
-    isAuthenticated
+    isAuthenticated,
+    changePassword
 };

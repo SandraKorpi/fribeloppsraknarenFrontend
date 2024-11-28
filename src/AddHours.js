@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import HourService from './HourService';
-import './Modal.css';
-import './buttom.css'
-
-Modal.setAppElement('#root');
 
 const AddHours = ({ show, onClose, date, refreshCalendar }) => {
     const [hours, setHours] = useState("");
@@ -17,7 +13,6 @@ const AddHours = ({ show, onClose, date, refreshCalendar }) => {
     const [day, setDay] = useState(null);
     const navigate = useNavigate();
 
-    // Kontroll för om datum är valt
     useEffect(() => {
         if (date) {
             setYear(date.getFullYear());
@@ -26,60 +21,68 @@ const AddHours = ({ show, onClose, date, refreshCalendar }) => {
         }
     }, [date]);
 
-    // Kallar på metoden som skickar timmarna till API:et.
     const handleInkomster = async (e) => {
         e.preventDefault();
         try {
             const response = await HourService.addHours(hours, month, day, year, hourlyRate, vacationPay);
             console.log("Registrering av timmar fungerade:", response);
             setError(null);
-            onClose(); // Stänger modalen när registreringen är klar.
-            refreshCalendar(); // Uppdaterar kalendern
+            onClose();
+            refreshCalendar();
         } catch (error) {
             console.error("Fel vid registrering av timmar:", error);
             setError("Något blev fel vid registrering av dina timmar.");
         }
     };
 
-    // Om inget datum är valt
     if (!date) {
         return <div>Inget datum valt</div>;
     }
 
     return (
-        <Modal isOpen={show} onRequestClose={onClose} contentLabel="Lägg till timmar" classname="modal-content">
-            <h3>Valt datum: År: {year}, Månad: {month}, Dag: {day}</h3>
-            <h2>Fyll i ditt arbetspass:</h2>
-            <form onSubmit={handleInkomster}>
-                <div>
-                    <label>Antal timmar:</label>
-                    <input
-                        type="text"
-                        value={hours}
-                        onChange={(e) => setHours(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Timlön i kr:</label>
-                    <input
-                        type="text"
-                        value={hourlyRate}
-                        onChange={(e) => setHourlyRate(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Semesterersättning i procent:</label>
-                    <input
-                        type="text"
-                        value={vacationPay}
-                        onChange={(e) => setVacationPay(e.target.value)}
-                    />
-                </div>
-                <button className="primary-button" type="submit">Skicka</button>
-            </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <button className="primary-button" onClick={onClose}>Stäng</button>
+        <Modal show={show} onHide={onClose} backdrop="static" centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Lägg till timmar</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Valt datum: År: {year}, Månad: {month}, Dag: {day}</p>
+                <Form onSubmit={handleInkomster}>
+                    <Form.Group controlId="hours">
+                        <Form.Label>Antal timmar</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={hours}
+                            onChange={(e) => setHours(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="hourlyRate" className="mt-3">
+                        <Form.Label>Timlön i kr</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={hourlyRate}
+                            onChange={(e) => setHourlyRate(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="vacationPay" className="mt-3">
+                        <Form.Label>Semesterersättning i procent</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={vacationPay}
+                            onChange={(e) => setVacationPay(e.target.value)}
+                        />
+                    </Form.Group>
+                    {error && <p className="text-danger mt-3">{error}</p>}
+                    <Button variant="primary" type="submit" className="mt-3">
+                        Skicka
+                    </Button>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={onClose}>
+                    Stäng
+                </Button>
+            </Modal.Footer>
         </Modal>
     );
 };
