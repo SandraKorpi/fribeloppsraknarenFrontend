@@ -276,7 +276,6 @@ const updateUser = async (userName, email) => {
         });
 
         console.log("Uppdaterad användare:", response.data);
-        console.log("Token efter uppdatering:", localStorage.getItem("token"));
 
         // Kontrollera om servern skickar en ny token och uppdatera localStorage
         if (response.data.token) {
