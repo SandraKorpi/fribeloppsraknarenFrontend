@@ -257,31 +257,45 @@ const getUserForUser = async () => {
         console.error("Fel vid hämtning av användare:", error.response ? error.response.data : error.message);
         throw new Error("Det gick inte att hämta användaren.");
     }}
-
-const updateUser = async (userDto) => {
+const updateUser = async (userName, email) => {
     try {
         const token = localStorage.getItem("token");
+        console.log("Token innan uppdatering:", token);  // Logga den gamla token här
+
+        if (!token) throw new Error("Token saknas.");
+
         const userId = extractUserIdFromToken(token); // Extrahera användarens ID från token
+        const UpdateUserDto = { userName, email };
+
         if (!userId) throw new Error("Användar-ID kunde inte hittas i token.");
 
-        const response = await axios.put(`${API_URL}/api/users/${userId}`, userDto, {
+        const response = await axios.put(`${API_URL}/api/users/${userId}`, UpdateUserDto, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
+
         console.log("Uppdaterad användare:", response.data);
+        console.log("Token efter uppdatering:", localStorage.getItem("token"));
+
+        // Kontrollera om servern skickar en ny token och uppdatera localStorage
+        if (response.data.token) {
+            console.log("Ny token:", response.data.token); // Logga den nya token om den finns
+            localStorage.setItem("token", response.data.token); // Uppdatera token i localStorage
+        }
+
         return response.data;
     } catch (error) {
         console.error("Fel vid uppdatering av användare:", error.response ? error.response.data : error.message);
         throw new Error("Det gick inte att uppdatera användaren.");
     }
 };
+
+
+
 const changePassword = async (currentPassword, newPassword, confirmPassword) => {
     try {
-        // Logga de värden som skickas
-        console.log(`Current Passwordapi: '${currentPassword}'`);
-        console.log(`New Password: '${newPassword}'`);
-        console.log(`Confirm Password: '${confirmPassword}'`);
+        const token = localStorage.getItem("token");
 
         if (newPassword !== confirmPassword) {
             throw new Error("De nya lösenorden matchar inte.");
@@ -296,6 +310,9 @@ const changePassword = async (currentPassword, newPassword, confirmPassword) => 
 
         // Skicka PUT-förfrågan till backend
         const response = await axios.put(`${API_URL}/api/auth/change-password`, changePasswordDto, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         console.log("Lösenord ändrat framgångsrikt:", response.data);

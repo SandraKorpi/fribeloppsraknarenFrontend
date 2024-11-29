@@ -81,6 +81,7 @@ body {
     border-radius: 20px;
     margin-bottom: 20px;
     padding: 20px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);  /* Mer 3D-effekt */
 }
 .info-text{
     display: flex;
@@ -102,6 +103,7 @@ body {
     margin: 15px;
 }
 
+
 /* Ytterligare centreringsklass för kalendern */
 .centered-calendar {
     display: flex;
@@ -110,6 +112,7 @@ body {
     height: auto;            /* Se till att föräldern täcker hela höjden på sidan */
     width: 100%;
     margin-bottom: 20px;
+
 }
 
 

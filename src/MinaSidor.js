@@ -57,13 +57,14 @@ function MinaSidor() {
         try {
             // Uppdatera användardetaljer om de har förändrats
             if (updatedUserDetails.userName !== userDetails.userName || updatedUserDetails.email !== userDetails.email) {
-                const updatedUser = await UserService.updateUserDetails(updatedUserDetails);
+                const updatedUser = await UserService.updateUserDetails(updatedUserDetails.userName, updatedUserDetails.email);
                 console.log('Uppdaterad användare:', updatedUser);
                 setUserDetails(updatedUser); // Uppdatera den lokala staten med de nya uppgifterna
             }
             setShowModal(false);
         } catch (error) {
             console.error("Fel vid sparande av användardetaljer:", error);
+            console.log(`Updated User Name: ${updatedUserDetails.userName}`);
         }
     };
 
@@ -138,7 +139,7 @@ function MinaSidor() {
                                 name="email"
                                 value={updatedUserDetails.email}
                                 onChange={handleInputChange}
-                            />
+                            />gii
                         </Form.Group>
 
                         <Button variant="link" onClick={() => setIsPasswordChange(!isPasswordChange)}>
