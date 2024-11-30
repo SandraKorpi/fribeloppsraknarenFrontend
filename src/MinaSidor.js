@@ -55,18 +55,29 @@ function MinaSidor() {
 
     const handleSaveChanges = async () => {
         try {
-            // Uppdatera användardetaljer om de har förändrats
-            if (updatedUserDetails.userName !== userDetails.userName || updatedUserDetails.email !== userDetails.email) {
-                const updatedUser = await UserService.updateUserDetails(updatedUserDetails.userName, updatedUserDetails.email);
-                console.log('Uppdaterad användare:', updatedUser);
-                setUserDetails(updatedUser); // Uppdatera den lokala staten med de nya uppgifterna
+            // Kontrollera om användardetaljer har ändrats
+            if (
+                updatedUserDetails.userName !== userDetails.userName ||
+                updatedUserDetails.email !== userDetails.email
+            ) {
+                // Uppdatera användardetaljer på backend
+                await UserService.updateUserDetails(
+                    updatedUserDetails.userName,
+                    updatedUserDetails.email
+                );
+
+                // Hämta de senaste användardetaljerna och uppdatera lokalt tillstånd
+                await fetchUserDetails();
             }
+
+            // Stäng modalen efter lyckad uppdatering
             setShowModal(false);
         } catch (error) {
             console.error("Fel vid sparande av användardetaljer:", error);
-            console.log(`Updated User Name: ${updatedUserDetails.userName}`);
+            alert("Ett fel uppstod vid uppdatering av dina uppgifter. Försök igen.");
         }
     };
+
 
     const handlePasswordChange = (e) => {
         const { name, value } = e.target;
@@ -139,7 +150,7 @@ function MinaSidor() {
                                 name="email"
                                 value={updatedUserDetails.email}
                                 onChange={handleInputChange}
-                            />gii
+                            />
                         </Form.Group>
 
                         <Button variant="link" onClick={() => setIsPasswordChange(!isPasswordChange)}>

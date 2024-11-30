@@ -13,9 +13,11 @@ import MinaSidor from './MinaSidor';
 import PrivateRoute from './PrivateRoute'; // Importera PrivateRoute-komponenten
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {AuthProvider} from "./AuthContext";
 
 function App() {
     return (
+        <AuthProvider>
         <Router>
             <div>
                 {/* Header visas på varje sida */}
@@ -82,6 +84,7 @@ function App() {
                 <Footer />
             </div>
         </Router>
+            </ AuthProvider>
     );
 }
 

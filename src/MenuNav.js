@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { AuthContext } from "./AuthContext";
 import ApiService from "./ApiService";
-import './Main.css';
+import "./Main.css";
 
 const MenuNav = [
     { label: "Hem", url: "/Homelogedin" },
@@ -11,17 +12,11 @@ const MenuNav = [
 ];
 
 function Navigation() {
-    // Skapa ett state för att hantera autentiseringstillstånd
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    // Kontrollera autentisering vid första renderingen
-    useEffect(() => {
-        setIsAuthenticated(ApiService.isAuthenticated());
-    }, []);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
     const handleLogout = () => {
         ApiService.logout();
-        setIsAuthenticated(false); // Uppdatera tillståndet direkt vid utloggning
+        setIsAuthenticated(false); // Uppdatera kontextens tillstånd
     };
 
     return (

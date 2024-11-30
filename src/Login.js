@@ -1,27 +1,37 @@
-import React, { useState } from 'react'; // Lägg till useState här
+import React, {useContext, useState} from 'react'; // Lägg till useState här
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import ApiService from "./ApiService";
 import StartHeader from "./StartHeader";
+import {AuthContext} from "./AuthContext";
 
 function Login() {
     const [userName, setUserName] = useState(""); // Flyttade useState till komponentnivå
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const navigate = useNavigate(); // Flyttade också useNavigate till komponentnivå
+    const { setIsAuthenticated } = useContext(AuthContext);
 
     const handleLogin = async (e) => {
         e.preventDefault(); // Förhindra sidladdning
         try {
             const response = await ApiService.login(userName, password); // Kalla ApiService:s login-metod
             console.log("Inloggning lyckades:", response);
-            setError(null); // Rensa eventuella felmeddelanden
-            navigate("/HomeLogedIn"); // Korrekt sökväg
+
+            // Kontrollera om token finns i responsen
+            if (response.token) {
+                setIsAuthenticated(true); // Uppdatera kontextens tillstånd
+                setError(null); // Rensa eventuella felmeddelanden
+                navigate("/HomeLogedIn"); // Korrekt sökväg
+            } else {
+                throw new Error("Token saknas i svaret från servern");
+            }
         } catch (error) {
             console.error("Inloggningsfel:", error);
             setError("Fel användarnamn eller lösenord"); // Visa ett felmeddelande vid misslyckad inloggning
         }
     };
+
 
     const handleRegisterClick = () => {
         // Navigera till register-sidan när knappen klickas
