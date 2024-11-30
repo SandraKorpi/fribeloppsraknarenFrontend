@@ -8,17 +8,20 @@ body {
 }
 
 /* Header styles */
-.header {
+.header-top{
     background: rgb(60, 30, 94);
     color: #feefc4; /* Textfärg */
-    padding: 10px 0; /* Vertikal padding */
+    padding: 30px 0; /* Vertikal padding */
     font-family: 'Alex Brush', sans-serif; /* Font-stil */
-    font-size: 18px; /* Fontstorlek */
+    font-size: 25px; /* Fontstorlek */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Skugga under header */
 }
-
+.header-bottom {
+    background-color: #653594; /* Mörk bakgrund för navigeringen */
+    width: 100%;
+}
 .custom-navbar {
-    background-color: rgb(60, 30, 94);
+    background-color: rgb(101, 53, 148);
 }
 
 .header a.navbar-brand {
@@ -33,11 +36,11 @@ body {
 }
 
 .header .navbar-nav .nav-link {
-    color: #cccccc; /* Standardfärg för meny-länkar */
+    color: #ffffff; /* Standardfärg för meny-länkar */
 }
 
 .header .navbar-nav .nav-link:hover {
-    color: #ffffff; /* Färg vid hover */
+    color: #ee7b7e; /* Färg vid hover */
 }
 
 

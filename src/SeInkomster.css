@@ -6,4 +6,24 @@
     align-items: center; /* Centrerar horisontellt */
     min-height: calc(100vh - 100px); /* Se till att innehållet inte täcker headern eller footern, justera om headern/footer är högre än 100px */
     padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Skugga under header */
+}
+
+
+.content-box {
+    background-color: white; /* Gör allt vitt inuti */
+    border: 1px solid #ddd; /* Kantlinje för hela boxen */
+    border-radius: 8px; /* Rundade hörn */
+    padding: 20px; /* Padding runt hela */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+}
+
+.user-details, .work-details {
+    margin-bottom: 20px; /* Utrymme mellan sektionerna */
+}
+
+.work-details {
+    margin-top: 20px;
 }

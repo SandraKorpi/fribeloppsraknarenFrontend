@@ -46,7 +46,7 @@ function MinaSidor() {
     }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setUpdatedUserDetails({
             ...updatedUserDetails,
             [name]: value,
@@ -80,7 +80,7 @@ function MinaSidor() {
 
 
     const handlePasswordChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         console.log(`Name: ${name}, Value: ${value}`); // Logga när fältet ändras
         if (name === 'newPassword') {
             setNewPassword(value);
@@ -115,98 +115,102 @@ function MinaSidor() {
             console.error("Fel vid uppdatering av lösenord:", error);
         }
     };
-
     return (
-        <div className="main-content-wrapper">
-            <h2>Din information:</h2>
-            <div className="user-details">
-                <p><strong>Namnet:</strong> {userDetails.userName}</p>
-                <p><strong>Email:</strong> {userDetails.email}</p>
-                <Button variant="primary" onClick={() => setShowModal(true)}>
-                    Ändra
-                </Button>
-            </div>
+        <div className="main-content-wrapper"> {/* En enhetlig behållare */}
+            <div className="content-box"> {/* Ny wrapper runt allt innehåll */}
+                <h2>Din information:</h2>
+                <div className="user-details">
+                    <p><strong>Namnet:</strong> {userDetails.userName}</p>
+                    <p><strong>Email:</strong> {userDetails.email}</p>
+                    <Button variant="primary" onClick={() => setShowModal(true)}>
+                        Ändra
+                    </Button>
+                </div>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Ändra dina uppgifter</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="userName">
-                            <Form.Label>Namnet</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="userName"
-                                value={updatedUserDetails.userName}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
+                <Modal show={showModal} onHide={() => setShowModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Ändra dina uppgifter</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group controlId="userName">
+                                <Form.Label>Namnet</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="userName"
+                                    value={updatedUserDetails.userName}
+                                    onChange={handleInputChange}
+                                />
+                            </Form.Group>
 
-                        <Form.Group controlId="email">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                value={updatedUserDetails.email}
-                                onChange={handleInputChange}
-                            />
-                        </Form.Group>
+                            <Form.Group controlId="email">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    value={updatedUserDetails.email}
+                                    onChange={handleInputChange}
+                                />
+                            </Form.Group>
 
-                        <Button variant="link" onClick={() => setIsPasswordChange(!isPasswordChange)}>
-                            {isPasswordChange ? "Avbryt byt lösenord" : "Byt lösenord"}
+                            <Button variant="link" onClick={() => setIsPasswordChange(!isPasswordChange)}>
+                                {isPasswordChange ? "Avbryt byt lösenord" : "Byt lösenord"}
+                            </Button>
+
+                            {isPasswordChange && (
+                                <>
+                                    <Form.Group controlId="currentPassword">
+                                        <Form.Label>Nuvarande lösenord</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="currentPassword"
+                                            value={currentPassword}
+                                            onChange={handlePasswordChange}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="newPassword">
+                                        <Form.Label>Nytt lösenord</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="newPassword"
+                                            value={newPassword}
+                                            onChange={handlePasswordChange}
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="confirmPassword">
+                                        <Form.Label>Bekräfta lösenord</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="confirmPassword"
+                                            value={confirmPassword}
+                                            onChange={handlePasswordChange}
+                                        />
+                                    </Form.Group>
+
+                                    <Button variant="primary" onClick={handleUpdatePassword}>
+                                        Uppdatera lösenord
+                                    </Button>
+                                </>
+                            )}
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                            Avbryt
                         </Button>
+                        <Button variant="primary" onClick={handleSaveChanges}>
+                            Spara ändringar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
 
-                        {isPasswordChange && (
-                            <>
-                                <Form.Group controlId="currentPassword"> {/* Uppdaterad här */}
-                                    <Form.Label>Nuvarande lösenord</Form.Label> {/* Uppdaterad här */}
-                                    <Form.Control
-                                        type="password"
-                                        name="currentPassword" // Uppdaterad här
-                                        value={currentPassword} // Uppdaterad här
-                                        onChange={handlePasswordChange}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="newPassword">
-                                    <Form.Label>Nytt lösenord</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="newPassword"
-                                        value={newPassword}
-                                        onChange={handlePasswordChange}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="confirmPassword">
-                                    <Form.Label>Bekräfta lösenord</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="confirmPassword"
-                                        value={confirmPassword}
-                                        onChange={handlePasswordChange}
-                                    />
-                                </Form.Group>
-
-                                <Button variant="primary" onClick={handleUpdatePassword}>
-                                    Uppdatera lösenord
-                                </Button>
-                            </>
-                        )}
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Avbryt
-                    </Button>
-                    <Button variant="primary" onClick={handleSaveChanges}>
-                        Spara ändringar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            <Seinkomster />
+                {/* Lägg till detaljer för arbetade timmar */}
+                <div className="work-details">
+                    <Seinkomster/>
+                </div>
+            </div>
         </div>
     );
 }

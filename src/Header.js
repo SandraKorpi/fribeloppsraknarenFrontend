@@ -5,13 +5,18 @@ import MenuNav from "./MenuNav";
 
 function Header() {
     return (
-        <Navbar className="header" expand="lg">
-            <Container>
+        <div className="header">
+            <div className="header-top">
                 <Navbar.Brand href="#">Fribelopps-räknaren</Navbar.Brand>
-                <MenuNav/>
-            </Container>
-        </Navbar>
+            </div>
+            <div className="header-bottom">
+                <Navbar expand="lg">
+                    <Container>
+                        <MenuNav />
+                    </Container>
+                </Navbar>
+            </div>
+        </div>
     );
 }
-
 export default Header;
