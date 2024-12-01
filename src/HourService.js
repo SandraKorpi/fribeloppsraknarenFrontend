@@ -76,6 +76,15 @@ const HourService = {
         }
     },
 
+    async deleteAllHoursForMonth(year, month) {
+        try {
+            const response = await ApiService.deleteAllHoursForMonth(year, month);
+            return response;
+        } catch (error) {
+            throw new Error("Det gick inte att ta bort alla timmar för den angivna månaden");
+        }
+    },
+
     async getOneHour(year, month, day) {
         try {
             return await ApiService.getOneHour(year, month, day);

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import HourService from './HourService'; // Importera din HourService
-import './Main.css'
-import './SeInkomster.css'
+import Button from 'react-bootstrap/Button';
+import HourService from './HourService';
+import './Main.css';
+import './SeInkomster.css';
 
 function Seinkomster() {
     const [months, setMonths] = useState([]);
-    const [workedHoursDetails, setWorkedHoursDetails] = useState(""); // För att lagra detaljer om arbetade timmar
-
-    // Formatmetod för att lägga till extra radbrytningar
-    const formatWorkedHoursDetails = (details) => {
-        return details.split("\n").join("\n\n"); // Lägg till extra radbrytningar mellan varje post
-    };
+    const [selectedMonth, setSelectedMonth] = useState(null);
+    const [workedHoursDetails, setWorkedHoursDetails] = useState("");
 
     useEffect(() => {
         async function fetchData() {
@@ -24,17 +21,37 @@ function Seinkomster() {
         }
 
         fetchData();
-    }, []); // Körs bara en gång när komponenten laddas
+    }, []);
 
-    // Funktion för att hämta detaljer om arbetade timmar när en månad väljs
     const handleMonthSelect = async (year, month) => {
+        setSelectedMonth({ year, month });
         try {
             const details = await HourService.getWorkedHoursDetails(year, month);
-            const formattedDetails = formatWorkedHoursDetails(details); // Formatera detaljer innan vi sätter till state
-            setWorkedHoursDetails(formattedDetails); // Sätt detaljer i state för att visa i textrutan
+            setWorkedHoursDetails(details);
         } catch (error) {
             console.error("Fel vid hämtning av arbetade timmar:", error);
             setWorkedHoursDetails("Kunde inte hämta detaljer om arbetade timmar.");
+        }
+    };
+
+    const handleDeleteHours = async () => {
+        if (!selectedMonth) {
+            alert("Välj en månad först!");
+            return;
+        }
+
+        const { year, month } = selectedMonth;
+
+        // Logga månaden och året för debugging
+        console.log(`Försöker radera timmar för: Månad: ${month}, År: ${year}`);
+
+        try {
+            await HourService.deleteAllHoursForMonth(year, month);
+            alert(`Timmar för ${month}/${year} har tagits bort.`);
+            setWorkedHoursDetails(""); // Rensa textrutan
+        } catch (error) {
+            console.error("Fel vid radering av timmar:", error);
+            alert("Det gick inte att ta bort timmarna.");
         }
     };
 
@@ -49,7 +66,7 @@ function Seinkomster() {
                     {months.map((item, index) => (
                         <Dropdown.Item
                             key={index}
-                            onClick={() => handleMonthSelect(item.year, item.month)} // Hämta detaljer för vald månad
+                            onClick={() => handleMonthSelect(item.year, item.month)}
                         >
                             {item.month}/{item.year}
                         </Dropdown.Item>
@@ -62,10 +79,18 @@ function Seinkomster() {
                 <textarea
                     rows="10"
                     cols="50"
-                    value={workedHoursDetails} // Visar detaljer om arbetade timmar
+                    value={workedHoursDetails}
                     readOnly
                 />
             </div>
+
+            <Button
+                variant="danger"
+                onClick={handleDeleteHours}
+                className="mt-3"
+            >
+                Ta bort timmar för vald månad
+            </Button>
         </div>
     );
 }

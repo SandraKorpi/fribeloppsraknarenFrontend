@@ -180,6 +180,25 @@ const deleteHour = async ( year, month, date) =>{
     }
 };
 
+const deleteAllHoursForMonth = async (year, month) => {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await axios.delete(
+            `${API_URL}/api/worked-hours/year/${year}/month/${month}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Skicka token för autentisering
+                },
+            }
+        );
+        console.log("Alla timmar för månaden raderade:", response.data);
+        return response.data; // Returnera API-svaret om det behövs
+    } catch (error) {
+        console.error("Fel vid radering av alla timmar för månaden:", error);
+        throw new Error("Det gick inte att radera alla timmar för den valda månaden.");
+    }
+};
+
 //api-anrop för att uppdatera en timme.
 const updateHour = async (hours, month, date, year, hourlyRate, vacationPay) =>{
 
@@ -319,7 +338,30 @@ const changePassword = async (currentPassword, newPassword, confirmPassword) => 
     } catch (error) {
         console.error("Fel vid ändring av lösenord:", error.response ? error.response.data : error.message);
         throw new Error("Det gick inte att ändra lösenordet.");
-    }
+    }}
+
+    // API-anrop för att hämta semesterinformation baserat på månad och år
+    const getSemesterDetails = async (month, year) => {
+        try {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                throw new Error("Token saknas.");
+            }
+
+            const response = await axios.get(`${API_URL}/api/semester/${month}/${year}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Skicka med token för autentisering
+                },
+            });
+
+            console.log("API Response för semester:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Fel vid hämtning av semesterinformation:", error);
+            throw new Error("Det gick inte att hämta semesterinformation.");
+        }
+
 };
 
 
@@ -341,5 +383,7 @@ export default {
     updateUser,
     logout,
     isAuthenticated,
-    changePassword
+    changePassword,
+    deleteAllHoursForMonth,
+    getSemesterDetails
 };
