@@ -139,6 +139,22 @@ const HourService = {
             throw new Error("Det gick inte att hämta terminens inkomster");
         }
     },
+
+    async getSemesterDetails(month, year) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("Token saknas.");
+        }
+
+        try {
+            const response = await ApiService.getSemesterDetails(month, year, token);
+            console.log("API Response för semester:", response);
+            return response;
+        } catch (error) {
+            throw new Error("Det gick inte att hämta semesterinformation.");
+        }
+    },
+
 };
 
 export default HourService;
