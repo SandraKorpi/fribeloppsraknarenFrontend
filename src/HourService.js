@@ -141,13 +141,9 @@ const HourService = {
     },
 
     async getSemesterDetails(month, year) {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            throw new Error("Token saknas.");
-        }
 
         try {
-            const response = await ApiService.getSemesterDetails(month, year, token);
+            const response = await ApiService.getSemesterDetails(month, year);
             console.log("API Response för semester:", response);
             return response;
         } catch (error) {

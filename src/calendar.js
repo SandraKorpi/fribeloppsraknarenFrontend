@@ -9,6 +9,7 @@ import './dot.css';
 import AddHours from "./AddHours";
 import UpdateHours from "./UpdateHours";
 import './Calendar.css';
+
 const Customcalendar = () => {
     const [date, setDate] = useState(new Date());
     const [error, setError] = useState(null);
@@ -17,15 +18,15 @@ const Customcalendar = () => {
     const [menuVisible, setMenuVisible] = useState(false);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const menuRef = useRef(null);
-   // const [showModal, setShowModal] = useState(false);  // Hantera visning av modalen
     const [modalDate, setModalDate] = useState(null);  // För att hålla koll på datumet för radering
     const [showAddModal, setShowAddModal] = useState(false);  // För "Lägg till timmar"-modalen
     const [showDeleteModal, setShowDeleteModal] = useState(false);  // För "Radera timmar"-modalen
-const [showUpdateModal, setShowUpdateModal] = useState(false); //updatera-modalen
+    const [showUpdateModal, setShowUpdateModal] = useState(false); // För uppdatera-modalen
     const [todayHours, setTodayHours] = useState(null);
     const [monthlyIncome, setMonthlyIncome] = useState(null);
     const [termIncome, setTermIncome] = useState(null);
     const [compareSemesterIncome, setCompareSemesterIncome] = useState(null);
+    const [incomeLimit, setIncomeLimit] = useState(null); // För att hämta incomelimit
 
     const handleDayClick = (selectedDate, event) => {
         event.preventDefault();
@@ -41,7 +42,7 @@ const [showUpdateModal, setShowUpdateModal] = useState(false); //updatera-modale
         setMenuVisible(false);
     };
 
-    //för modalerna
+    // För modalerna
     const closeModals = () => {
         setShowAddModal(false);
         setShowDeleteModal(false);
@@ -82,6 +83,7 @@ const [showUpdateModal, setShowUpdateModal] = useState(false); //updatera-modale
         fetchIncome(currentYear, currentMonth);
         fetchSemesterIncome(currentYear, currentMonth);
         fetchCompareIncomeSemester(currentYear, currentMonth);
+        fetchIncomeLimit(currentYear, currentMonth); // Lägg till för att hämta incomelimit
     }, []);
 
     useEffect(() => {
@@ -115,10 +117,11 @@ const [showUpdateModal, setShowUpdateModal] = useState(false); //updatera-modale
     const handleMonthChange = ({ activeStartDate }) => {
         const year = activeStartDate.getFullYear();
         const month = activeStartDate.getMonth() + 1;
-        //Så att informationen byts baserat på när användaren bläddrar i kalendern.
+        // Så att informationen byts baserat på när användaren bläddrar i kalendern.
         fetchIncome(year, month);
         fetchSemesterIncome(year, month);
-        fetchCompareIncomeSemester(year, month)
+        fetchCompareIncomeSemester(year, month);
+        fetchIncomeLimit(year, month); // Uppdaterar incomelimit också när månaden ändras
     };
 
     const fetchSemesterIncome = async (year, month) => {
@@ -129,15 +132,25 @@ const [showUpdateModal, setShowUpdateModal] = useState(false); //updatera-modale
             console.error("Fel vid hämtning av terminsinkomst: ", error);
         }
     };
-const fetchCompareIncomeSemester = async (year, month) => {
-    try {
-        const response = await HourService.compareSemesterIncome(year, month);
-        setCompareSemesterIncome(response);
 
-    } catch (error) {
-        console.error("Fel vid hämtning av terminsinkomst: ", error);
-    }
-}
+    const fetchCompareIncomeSemester = async (year, month) => {
+        try {
+            const response = await HourService.compareSemesterIncome(year, month);
+            setCompareSemesterIncome(response);
+        } catch (error) {
+            console.error("Fel vid hämtning av terminsinkomst: ", error);
+        }
+    };
+
+    const fetchIncomeLimit = async (year, month) => {
+        try {
+            const response = await HourService.getSemesterDetails(year, month); // Här anropar vi metoden för att hämta incomelimit
+            setIncomeLimit(response.incomeLimit)
+        } catch (error) {
+            console.error("Fel vid hämtning av incomelimit: ", error);
+        }
+    };
+
     const showOneHour = async (year, month, day) => {
         try {
             const storedData = await HourService.getOneHour(year, month, day);
@@ -168,6 +181,7 @@ const fetchCompareIncomeSemester = async (year, month) => {
         }
         return null;
     };
+
     const refreshCalendar = async () => {
         // Uppdatera alla timmar efter raderingen
         const response = await HourService.fetchAllHours();
@@ -182,7 +196,7 @@ const fetchCompareIncomeSemester = async (year, month) => {
         fetchIncome(currentYear, currentMonth); // Månadens inkomst
         fetchSemesterIncome(currentYear, currentMonth); // Terminsinkomst
         fetchCompareIncomeSemester(currentYear, currentMonth); // Jämför terminsinkomst
-
+        fetchIncomeLimit(currentMonth, currentYear); // Uppdaterar incomelimit också
     };
 
     return (
@@ -207,33 +221,26 @@ const fetchCompareIncomeSemester = async (year, month) => {
                     ref={menuRef}
                     className="context-menu"
                     style={{
-                      /*  position: "absolute",
-                        top: menuPosition.y,
-                        left: menuPosition.x,
-                        zIndex: 1000, */
-                        position: "fixed", // Fixerat till skärmen
-                        top: "50%",        // Vertikalt centrerad
-                        left: "50%",       // Horisontellt centrerad
-                        transform: "translate(-50%, -50%)", // Flytta tillbaka hälften av bredden/höjden
-                        zIndex: 1000,      // Håll den över andra element
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        zIndex: 1000,
                     }}
                 >
                     <Dropdown.Menu show>
-                        <Dropdown.Item as="button"           onClick={() => {
-                            closeMenu(); // Stänger menyn
-                            setShowAddModal(true); // Visar AddHours-modal
-                        }}
-                        >
+                        <Dropdown.Item as="button" onClick={() => {
+                            closeMenu();
+                            setShowAddModal(true);
+                        }}>
                             Lägg till timmar
                         </Dropdown.Item>
-                        <Dropdown.Item as="button"           onClick={() => {
-                            closeMenu(); // Stänger menyn
-                            setShowUpdateModal(true); // Visar AddHours-modal
-                        }}
-                        >
+                        <Dropdown.Item as="button" onClick={() => {
+                            closeMenu();
+                            setShowUpdateModal(true);
+                        }}>
                             Ändra timmar
                         </Dropdown.Item>
-                        {/* Radera timmar-knappen */}
                         <Dropdown.Item as="button" onClick={() =>{
                             closeMenu();
                             setShowDeleteModal(true)}}>
@@ -244,8 +251,6 @@ const fetchCompareIncomeSemester = async (year, month) => {
                 </div>
             )}
 
-            {/* Skicka med rätt datum till DeleteHour */}
-            {/* Visa rätt modal baserat på state */}
             <AddHours
                 show={showAddModal}
                 onClose={closeModals}
@@ -270,6 +275,7 @@ const fetchCompareIncomeSemester = async (year, month) => {
                 <p>Månadens inkomst: {monthlyIncome !== null ? monthlyIncome : "Laddar..."}</p>
                 <p>Terminens inkomst: {termIncome !== null ? termIncome : "Laddar..."}</p>
                 <p> {compareSemesterIncome !== null ? compareSemesterIncome : "Laddar..."}</p>
+                <p>Terminens fribelopp: {incomeLimit !== null ? incomeLimit : "Laddar..."}</p> {/* Lägg till income limit här */}
             </div>
         </div>
     );

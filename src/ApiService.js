@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // API URL
-const API_URL = "http://localhost:5051";
+const API_URL = "http://fribeloppsraknaren.eu-north-1.elasticbeanstalk.com";
 
 //ANVÄNDAR-METODER!
 
@@ -258,6 +258,36 @@ const compareSemesterIncome = async (year, semesterType) => {
         throw error;
     }
 }
+// Metod för att hämta termin baserat på månad och år
+const getSemesterDetails = async (year, month) => {
+    try {
+        const token = localStorage.getItem("token");
+        console.log("Token:", token); // Kontrollera att du får token
+        console.log("kolla datum ", month, year)
+
+        const response = await axios.get(`${API_URL}/api/semester/${month}/${year}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        console.log("API Response semesterdetails:", response);  // Logga hela svaret
+
+        if (response && response.data) {
+            const incomeLimit = response.data.incomeLimit;
+            console.log('Fribelopp (incomeLimit):', incomeLimit);
+
+            return response.data;  // Returnera semesterdata
+        } else {
+            console.error("API svarar inte som förväntat");
+            throw new Error("API svarar inte som förväntat");
+        }
+    } catch (error) {
+        console.error("Fel vid hämtning av semesterdata:", error);  // Mer detaljerad felhantering
+        throw new Error("Det gick inte att hämta semesterdata.");
+    }
+};
+
 const getUserForUser = async () => {
     try {
         // Hämta token från localStorage
@@ -338,31 +368,10 @@ const changePassword = async (currentPassword, newPassword, confirmPassword) => 
     } catch (error) {
         console.error("Fel vid ändring av lösenord:", error.response ? error.response.data : error.message);
         throw new Error("Det gick inte att ändra lösenordet.");
-    }}
+    }};
 
     // API-anrop för att hämta semesterinformation baserat på månad och år
-    const getSemesterDetails = async (month, year) => {
-        try {
-            const token = localStorage.getItem("token");
 
-            if (!token) {
-                throw new Error("Token saknas.");
-            }
-
-            const response = await axios.get(`${API_URL}/api/semester/${month}/${year}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`, // Skicka med token för autentisering
-                },
-            });
-
-            console.log("API Response för semester:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Fel vid hämtning av semesterinformation:", error);
-            throw new Error("Det gick inte att hämta semesterinformation.");
-        }
-
-};
 
 
 export default {
@@ -385,5 +394,5 @@ export default {
     isAuthenticated,
     changePassword,
     deleteAllHoursForMonth,
-    getSemesterDetails
+    getSemesterDetails,
 };

@@ -206,7 +206,7 @@ function MinaSidor() {
                     </Modal.Footer>
                 </Modal>
 
-                {/* Lägg till detaljer för arbetade timmar */}
+                {/* för detaljer om timmarna*/}
                 <div className="work-details">
                     <Seinkomster/>
                 </div>
