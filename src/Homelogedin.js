@@ -9,8 +9,8 @@ const Homelogedin = () => {
     return (
         <div className={"Home-container"}>
         <div className={"info-text"}>
-            <h1>Välkommen till Mina Sidor</h1>
-            <p>Här kan du se och hantera ditt innehåll.</p>
+            <h1>Välkommen till fribelopps-räknaren!</h1>
+            <p>Klicka på ett datum för att fylla i dina arbetspass i kalendern..</p>
         </div>
             <div className="centered-calendar">
                 <Calendar/>

@@ -23,13 +23,26 @@ body {
 .custom-navbar {
     background-color: rgb(101, 53, 148);
 }
+.header-top img {
+    display: block; /* Förhindrar att bilden påverkas av inline-marginaler */
+    margin: 0; /* Tar bort marginaler */
+}
+
+.header-top {
+    text-align: center;
+    margin: 0; /* Tar bort yttre mellanrum */
+    padding: 0; /* Tar bort inre mellanrum */
+}
 
 .header a.navbar-brand {
-    color: #ffffff; /* Färg för "Fribelopps-räknaren" */
-    text-transform: uppercase; /* Gör texten till versaler */
-    font-weight: bold; /* Fetstil */
+    color: #ffffff; /* Färg för "Fribeloppsräknaren" */
+    text-transform: none; /* Behåll textens ursprungliga stil */
     transition: color 0.3s ease; /* Smidig övergång vid hover */
+    text-align: center; /* Horisontell centrering */
+    display: block; /* Gör så att det kan centreras ordentligt */
+    width: 100%; /* Sätt bredden till 100% så att det tar upp hela utrymmet */
 }
+
 
 .header a.navbar-brand:hover {
     color: #ffffff; /* Ändra färg vid hover */
@@ -93,6 +106,44 @@ body {
     align-items: center;
     gap: 6px;
     border-radius: 20px;
+}
+.fribelopps-text-container {
+        display: flex;
+        flex-direction: column;  /* Stapla elementen vertikalt */
+        justify-content: flex-start; /* Börja från toppen */
+        align-items: center; /* Centrerar horisontellt */
+        min-height: calc(100vh - 100px); /* Se till att innehållet inte täcker headern eller footern, justera om headern/footer är högre än 100px */
+        padding: 40px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Skugga under header */
+
+        background-color: white; /* Gör allt vitt inuti */
+        border: 1px solid #ddd; /* Kantlinje för hela boxen */
+        border-radius: 8px; /* Rundade hörn */
+
+        max-width: 800px;
+        width: 100%;
+
+}
+/* Home-container som håller allt innehåll */
+.Home-container-fribelopp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrerar vertikalt */
+    align-items: center; /* Centrerar horisontellt */
+    flex-grow: 1; /* Gör så att containern växer för att fylla allt tillgängligt utrymme */
+    padding: 20px; /* Padding runt hela containern */
+    box-sizing: border-box; /* Se till att padding inte påverkar storleken */
+}
+.fribelopps-text-container h2 {
+    font-size: 40px; /* Större textstorlek för rubriken */
+    line-height: 1.5; /* Mer radavstånd för rubriken */
+    margin-bottom: 20px; /* Lägger till lite avstånd under rubriken */
+}
+
+.fribelopps-text-container p {
+    font-size: 25px; /* Större textstorlek för paragrafen */
+    line-height: 1.8; /* Mer radavstånd för texten */
+    margin-bottom: 20px; /* Lägger till lite avstånd under varje stycke */
 }
 
 .box-padding-all {

@@ -14,6 +14,7 @@ import PrivateRoute from './PrivateRoute'; // Importera PrivateRoute-komponenten
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {AuthProvider} from "./AuthContext";
+import Infotext from "./Infotext";
 
 function App() {
     return (
@@ -75,6 +76,14 @@ function App() {
                         element={
                             <PrivateRoute>
                                 <MinaSidor />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/Infotext"
+                        element={
+                            <PrivateRoute>
+                                <Infotext />
                             </PrivateRoute>
                         }
                     />

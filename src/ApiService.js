@@ -88,7 +88,7 @@ const addHours = async (hours, month, date, year, hourlyRate, vacationPay) => {
         year,
         hourlyRate,
         vacationPay,
-        userId // Lägg till användar-ID här
+        userId
     };
 
     const response = await axios.post(`${API_URL}/api/worked-hours/addHours`, workedHoursDto, {

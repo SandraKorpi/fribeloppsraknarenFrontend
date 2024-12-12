@@ -8,7 +8,7 @@ import "./Main.css";
 const MenuNav = [
     { label: "Hem", url: "/Homelogedin" },
     { label: "Mina sidor", url: "/MinaSidor" },
-    { label: "Se inkomster", url: "/seinkomster" },
+    { label: "Om fribeloppsräknaren", url: "/Infotext" },
 ];
 
 function Navigation() {

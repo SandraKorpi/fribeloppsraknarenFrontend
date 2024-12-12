@@ -120,7 +120,7 @@ function MinaSidor() {
             <div className="content-box"> {/* Ny wrapper runt allt innehåll */}
                 <h2>Din information:</h2>
                 <div className="user-details">
-                    <p><strong>Namnet:</strong> {userDetails.userName}</p>
+                    <p><strong>Namn:</strong> {userDetails.userName}</p>
                     <p><strong>Email:</strong> {userDetails.email}</p>
                     <Button variant="primary" onClick={() => setShowModal(true)}>
                         Ändra
@@ -134,7 +134,7 @@ function MinaSidor() {
                     <Modal.Body>
                         <Form>
                             <Form.Group controlId="userName">
-                                <Form.Label>Namnet</Form.Label>
+                                <Form.Label>Namn</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="userName"
