@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // API URL
-const API_URL = "http://fribeloppsraknaren.eu-north-1.elasticbeanstalk.com";
+const API_URL = "http://localhost:5000";
 
 //ANVÄNDAR-METODER!
 
