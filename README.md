@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Frontend Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the frontend application for the **Fribeloppsräknaren(CSNfribeloppApp)** project, built using **JavaScript**, **React**, and **Bootstrap**. The frontend communicates with the backend to provide a smooth user experience for managing and displaying CSN-related data.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **React-based UI**: Interactive and dynamic interface to manage and view CSN/worked hours data.
+- **Bootstrap**: Responsive design that adapts to various screen sizes.
+- **User Authentication**: Allows users to log in and access their personal data.
+- **Integration with Backend**: Communicates with the backend to perform CRUD operations on income data and other relevant information.
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Prerequisites
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+To run this frontend app, you need to have the **backend API** up and running. Follow these steps to set up and run both the frontend and backend.
 
-### `npm test`
+### Backend Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone or download the **backend repository** from https://github.com/SandraKorpi/CSNfribeloppApp
+2. Follow the instructions in the **backend README** to set up the backend, including configuring the database, dependencies, and running the Spring Boot application.
 
-### `npm run build`
+### Frontend Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone or download this **frontend repository**.
+2. Open a terminal/command prompt in the project directory.
+3. Install the necessary dependencies:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```bash
+   npm install
+After the installation is complete, run the frontend application:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+npm start
+The app will be available at http://localhost:3000 by default.
 
-### `npm run eject`
+**Backend Integration**
+Make sure that the backend API is running, as the frontend communicates with it to fetch and update data. The frontend will make HTTP requests to the backend for user authentication and data management.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**License**
+This project is licensed under the MIT License, with the following restrictions:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+You may not modify or redistribute the code for commercial purposes.
+You may not claim ownership or authorship of the code.
