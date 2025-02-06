@@ -17,7 +17,7 @@ To run this frontend app, you need to have the **backend API** up and running. F
 
 ### Backend Setup
 
-1. Clone or download the **backend repository** from https://github.com/SandraKorpi/CSNfribeloppApp
+1. Clone or download the **backend repository** from https://github.com/SandraKorpi/fribeloppsraknarenBackend
 2. Follow the instructions in the **backend README** to set up the backend, including configuring the database, dependencies, and running the Spring Boot application.
 
 ### Frontend Setup
@@ -36,8 +36,6 @@ The app will be available at http://localhost:3000 by default.
 **Backend Integration**
 Make sure that the backend API is running, as the frontend communicates with it to fetch and update data. The frontend will make HTTP requests to the backend for user authentication and data management.
 
-**License**
-This project is licensed under the MIT License, with the following restrictions:
 
-You may not modify or redistribute the code for commercial purposes.
-You may not claim ownership or authorship of the code.
+**License**
+This project is proprietary. You are not allowed to modify, distribute, or copy the code without permission. All rights are reserved by the original author, Sandra Korpi.
