@@ -252,8 +252,12 @@ function FribeloppStatus({ year, month, refreshKey }) {
             )}
 
             <p className="fribelopp-note mt-3 mb-0">
-                Inkomsten är lön före skatt inklusive semesterersättning. Beräkningen är en uppskattning och
-                CSN:s beslut gäller. Appen är inte gjord av CSN.
+                Siffran baseras bara på lön från timmarna du registrerat här, före skatt och inklusive
+                semesterersättning. CSN räknar all skattepliktig inkomst mot fribeloppet, även
+                näringsverksamhet och kapital som ränta, utdelning och försäljning av aktier eller fonder,
+                samt ersättningar som sjukpenning, a-kassa och föräldrapenning. Har du sådan inkomst
+                ligger du närmare gränsen än siffran visar. Beräkningen är en uppskattning och CSN:s
+                beslut gäller. Appen är inte gjord av CSN.
             </p>
         </section>
     );
