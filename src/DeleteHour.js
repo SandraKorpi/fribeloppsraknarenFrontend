@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import HourService from "./HourService";
 
 const DeleteHour = ({ show, onClose, date, refreshCalendar }) => {
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        if (show) {
-            console.log('Modal is open for date:', date);
-        }
-    }, [show, date]);
 
     const confirmDelete = async () => {
         try {
@@ -27,7 +21,7 @@ const DeleteHour = ({ show, onClose, date, refreshCalendar }) => {
             onClose(); // Stänger modalen
         } catch (error) {
             setError('Något gick fel vid raderingen.');
-            console.error("Fel vid radering av timmar:", error);
+
         }
     };
 

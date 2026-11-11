@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import UserService from './UserService';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import './Main.css';
 import Seinkomster from './Seinkomster';
 
@@ -15,7 +15,12 @@ function MinaSidor() {
     const [isPasswordChange, setIsPasswordChange] = useState(false);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [currentPassword, setCurrentPassword] = useState(''); // Uppdaterad här
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [modalError, setModalError] = useState(null);
+    const [passwordMessage, setPasswordMessage] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState(null);
 
     // Hämta användardetaljer
     const fetchUserDetails = async () => {
@@ -28,7 +33,6 @@ function MinaSidor() {
             });
             setLoading(false);
         } catch (error) {
-            console.error("Fel vid hämtning av användardetaljer:", error);
             setLoading(false);
         }
     };
@@ -71,50 +75,63 @@ function MinaSidor() {
             }
 
             // Stäng modalen efter lyckad uppdatering
+            setModalError(null);
             setShowModal(false);
         } catch (error) {
-            console.error("Fel vid sparande av användardetaljer:", error);
-            alert("Ett fel uppstod vid uppdatering av dina uppgifter. Försök igen.");
+            setModalError(error.message || "Ett fel uppstod vid uppdatering av dina uppgifter. Försök igen.");
         }
     };
 
 
     const handlePasswordChange = (e) => {
         const {name, value} = e.target;
-        console.log(`Name: ${name}, Value: ${value}`); // Logga när fältet ändras
         if (name === 'newPassword') {
             setNewPassword(value);
         } else if (name === 'confirmPassword') {
             setConfirmPassword(value);
-        } else if (name === 'currentPassword') { // Uppdaterad här
-            setCurrentPassword(value); // Uppdaterad här
+        } else if (name === 'currentPassword') {
+            setCurrentPassword(value);
         }
     };
 
     const handleUpdatePassword = async () => {
-        // Logga värdena innan vi skickar dem till servern
-        console.log("Current Password:", currentPassword); // Uppdaterad här
-        console.log("New Password:", newPassword);
-        console.log("Confirm Password:", confirmPassword);
-
-        if (newPassword !== confirmPassword) {
-            alert("Lösenorden matchar inte.");
-            return;
-        }
+        setModalError(null);
+        setPasswordMessage(null);
 
         try {
-            // Uppdatera lösenordet
-            await UserService.updatePassword(currentPassword, newPassword, confirmPassword); // Uppdaterad här
-            // När lösenordet är uppdaterat, nollställ lösenordsfält
-            setCurrentPassword(''); // Uppdaterad här
+            await UserService.updatePassword(currentPassword, newPassword, confirmPassword);
+            // Nollställ fälten när lösenordet är uppdaterat
+            setCurrentPassword('');
             setNewPassword('');
             setConfirmPassword('');
             setIsPasswordChange(false);
-            alert("Lösenordet har uppdaterats!");
+            setPasswordMessage("Lösenordet har uppdaterats.");
         } catch (error) {
-            console.error("Fel vid uppdatering av lösenord:", error);
+            setModalError(error.message || "Det gick inte att uppdatera lösenordet.");
         }
     };
+
+    const closeEditModal = () => {
+        setShowModal(false);
+        setModalError(null);
+        setIsPasswordChange(false);
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+    };
+
+    const handleDeleteAccount = async () => {
+        setDeleting(true);
+        setDeleteError(null);
+        try {
+            await UserService.deleteAccount();
+            window.location.href = "/";
+        } catch (error) {
+            setDeleteError(error.message || "Det gick inte att radera kontot.");
+            setDeleting(false);
+        }
+    };
+
     return (
         <div className="main-content-wrapper"> {/* En enhetlig behållare */}
             <div className="content-box"> {/* Ny wrapper runt allt innehåll */}
@@ -125,14 +142,16 @@ function MinaSidor() {
                     <Button variant="primary" onClick={() => setShowModal(true)}>
                         Ändra
                     </Button>
+                    {passwordMessage && <Alert variant="success" className="mt-3 py-2">{passwordMessage}</Alert>}
                 </div>
 
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal show={showModal} onHide={closeEditModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Ändra dina uppgifter</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form>
+                        {modalError && <Alert variant="danger" className="py-2">{modalError}</Alert>}
+                        <Form onSubmit={(e) => e.preventDefault()}>
                             <Form.Group controlId="userName">
                                 <Form.Label>Namn</Form.Label>
                                 <Form.Control
@@ -164,6 +183,7 @@ function MinaSidor() {
                                         <Form.Control
                                             type="password"
                                             name="currentPassword"
+                                            autoComplete="current-password"
                                             value={currentPassword}
                                             onChange={handlePasswordChange}
                                         />
@@ -174,6 +194,8 @@ function MinaSidor() {
                                         <Form.Control
                                             type="password"
                                             name="newPassword"
+                                            autoComplete="new-password"
+                                            minLength={10}
                                             value={newPassword}
                                             onChange={handlePasswordChange}
                                         />
@@ -184,6 +206,7 @@ function MinaSidor() {
                                         <Form.Control
                                             type="password"
                                             name="confirmPassword"
+                                            autoComplete="new-password"
                                             value={confirmPassword}
                                             onChange={handlePasswordChange}
                                         />
@@ -197,11 +220,35 @@ function MinaSidor() {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        <Button variant="secondary" onClick={closeEditModal}>
                             Avbryt
                         </Button>
                         <Button variant="primary" onClick={handleSaveChanges}>
                             Spara ändringar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <div className="mt-4">
+                    <Button variant="outline-danger" onClick={() => { setDeleteError(null); setShowDeleteModal(true); }}>
+                        Radera mitt konto
+                    </Button>
+                </div>
+
+                <Modal show={showDeleteModal} onHide={() => !deleting && setShowDeleteModal(false)} centered>
+                    <Modal.Header closeButton={!deleting}>
+                        <Modal.Title>Radera konto</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Ditt konto och alla dina registrerade timmar och studieuppgifter raderas permanent. Det går inte att ångra.</p>
+                        {deleteError && <Alert variant="danger" className="py-2">{deleteError}</Alert>}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" disabled={deleting} onClick={() => setShowDeleteModal(false)}>
+                            Avbryt
+                        </Button>
+                        <Button variant="danger" disabled={deleting} onClick={handleDeleteAccount}>
+                            {deleting ? "Raderar..." : "Radera permanent"}
                         </Button>
                     </Modal.Footer>
                 </Modal>

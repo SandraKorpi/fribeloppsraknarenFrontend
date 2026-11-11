@@ -24,14 +24,13 @@ const AddHours = ({ show, onClose, date, refreshCalendar }) => {
     const handleInkomster = async (e) => {
         e.preventDefault();
         try {
-            const response = await HourService.addHours(hours, month, day, year, hourlyRate, vacationPay);
-            console.log("Registrering av timmar fungerade:", response);
+            await HourService.addHours(hours, month, day, year, hourlyRate, vacationPay);
             setError(null);
             onClose();
             refreshCalendar();
         } catch (error) {
             console.error("Fel vid registrering av timmar:", error);
-            setError("Något blev fel vid registrering av dina timmar.");
+            setError(error.message || "Något blev fel vid registrering av dina timmar.");
         }
     };
 

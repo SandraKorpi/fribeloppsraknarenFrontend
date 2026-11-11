@@ -9,6 +9,7 @@ import './dot.css';
 import AddHours from "./AddHours";
 import UpdateHours from "./UpdateHours";
 import './Calendar.css';
+import FribeloppStatus from './FribeloppStatus';
 
 const Customcalendar = () => {
     const [date, setDate] = useState(new Date());
@@ -24,9 +25,9 @@ const Customcalendar = () => {
     const [showUpdateModal, setShowUpdateModal] = useState(false); // För uppdatera-modalen
     const [todayHours, setTodayHours] = useState(null);
     const [monthlyIncome, setMonthlyIncome] = useState(null);
-    const [termIncome, setTermIncome] = useState(null);
-    const [compareSemesterIncome, setCompareSemesterIncome] = useState(null);
-    const [incomeLimit, setIncomeLimit] = useState(null); // För att hämta incomelimit
+    // Månaden som kalendern visar just nu. Fribeloppet följer den, så att halvåret byts när man bläddrar.
+    const [viewed, setViewed] = useState({ year: new Date().getFullYear(), month: new Date().getMonth() + 1 });
+    const [refreshKey, setRefreshKey] = useState(0); // Ändras när timmar ändrats, så att fribeloppet laddas om.
 
     const handleDayClick = (selectedDate, event) => {
         event.preventDefault();
@@ -81,9 +82,6 @@ const Customcalendar = () => {
         const currentYear = date.getFullYear();
         const currentMonth = date.getMonth() + 1;
         fetchIncome(currentYear, currentMonth);
-        fetchSemesterIncome(currentYear, currentMonth);
-        fetchCompareIncomeSemester(currentYear, currentMonth);
-        fetchIncomeLimit(currentYear, currentMonth); // Lägg till för att hämta incomelimit
     }, []);
 
     useEffect(() => {
@@ -102,7 +100,8 @@ const Customcalendar = () => {
             const response = await HourService.fetchMonthPay(year, month);
             setMonthlyIncome(response);
         } catch (error) {
-            console.error("Fel vid hämtning av inkomst: ", error);
+            setMonthlyIncome(null);
+            setError(error.message);
         }
     };
 
@@ -118,37 +117,8 @@ const Customcalendar = () => {
         const year = activeStartDate.getFullYear();
         const month = activeStartDate.getMonth() + 1;
         // Så att informationen byts baserat på när användaren bläddrar i kalendern.
+        setViewed({ year, month });
         fetchIncome(year, month);
-        fetchSemesterIncome(year, month);
-        fetchCompareIncomeSemester(year, month);
-        fetchIncomeLimit(year, month); // Uppdaterar incomelimit också när månaden ändras
-    };
-
-    const fetchSemesterIncome = async (year, month) => {
-        try {
-            const response = await HourService.getSemesterIncome(year, month);
-            setTermIncome(response);
-        } catch (error) {
-            console.error("Fel vid hämtning av terminsinkomst: ", error);
-        }
-    };
-
-    const fetchCompareIncomeSemester = async (year, month) => {
-        try {
-            const response = await HourService.compareSemesterIncome(year, month);
-            setCompareSemesterIncome(response);
-        } catch (error) {
-            console.error("Fel vid hämtning av terminsinkomst: ", error);
-        }
-    };
-
-    const fetchIncomeLimit = async (year, month) => {
-        try {
-            const response = await HourService.getSemesterDetails(year, month); // Här anropar vi metoden för att hämta incomelimit
-            setIncomeLimit(response.incomeLimit)
-        } catch (error) {
-            console.error("Fel vid hämtning av incomelimit: ", error);
-        }
     };
 
     const showOneHour = async (year, month, day) => {
@@ -184,19 +154,19 @@ const Customcalendar = () => {
 
     const refreshCalendar = async () => {
         // Uppdatera alla timmar efter raderingen
-        const response = await HourService.fetchAllHours();
-        setAllDates(response.map((workedHour) => ({
-            year: workedHour.year,
-            month: workedHour.month,
-            date: workedHour.date,
-        })));
+        try {
+            const response = await HourService.fetchAllHours();
+            setAllDates(response.map((workedHour) => ({
+                year: workedHour.year,
+                month: workedHour.month,
+                date: workedHour.date,
+            })));
+        } catch (err) {
+            setError(err.message);
+        }
         // Uppdatera inkomster vid varje ändring.
-        const currentYear = date.getFullYear();
-        const currentMonth = date.getMonth() + 1;
-        fetchIncome(currentYear, currentMonth); // Månadens inkomst
-        fetchSemesterIncome(currentYear, currentMonth); // Terminsinkomst
-        fetchCompareIncomeSemester(currentYear, currentMonth); // Jämför terminsinkomst
-        fetchIncomeLimit(currentMonth, currentYear); // Uppdaterar incomelimit också
+        fetchIncome(viewed.year, viewed.month); // Månadens inkomst för månaden som visas
+        setRefreshKey((key) => key + 1); // Fribeloppet hämtas om
     };
 
     return (
@@ -273,9 +243,7 @@ const Customcalendar = () => {
             <div className="info-box">
                 <h3>Dagens timmar: {todayHours !== null ? todayHours : "Laddar..."}</h3>
                 <p>Månadens inkomst: {monthlyIncome !== null ? monthlyIncome : "Laddar..."}</p>
-                <p>Terminens inkomst: {termIncome !== null ? termIncome : "Laddar..."}</p>
-                <p> {compareSemesterIncome !== null ? compareSemesterIncome : "Laddar..."}</p>
-                <p>Terminens fribelopp: {incomeLimit !== null ? incomeLimit : "Laddar..."}</p> {/* Lägg till income limit här */}
+                <FribeloppStatus year={viewed.year} month={viewed.month} refreshKey={refreshKey} />
             </div>
         </div>
     );

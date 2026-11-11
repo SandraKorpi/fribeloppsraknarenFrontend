@@ -16,7 +16,6 @@ function Login() {
         e.preventDefault(); // Förhindra sidladdning
         try {
             const response = await ApiService.login(userName, password); // Kalla ApiService:s login-metod
-            console.log("Inloggning lyckades:", response);
 
             // Kontrollera om token finns i responsen
             if (response.token) {
@@ -27,8 +26,7 @@ function Login() {
                 throw new Error("Token saknas i svaret från servern");
             }
         } catch (error) {
-            console.error("Inloggningsfel:", error);
-            setError("Fel användarnamn eller lösenord"); // Visa ett felmeddelande vid misslyckad inloggning
+            setError(error.message || "Fel användarnamn eller lösenord"); // Serverns meddelande, till exempel vid för många försök
         }
     };
 
@@ -58,6 +56,7 @@ function Login() {
                             <Form.Label>Lösenord</Form.Label>
                             <Form.Control
                                 type="password"
+                                autoComplete="current-password"
                                 placeholder="Ange ditt lösenord"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

@@ -14,8 +14,7 @@ function RegisterUser() {
     const handleRegistration = async (e) => {
         e.preventDefault();
         try {
-            const response = await ApiService.register(userName, password, email);
-            console.log("Registrering lyckades:", response);
+            await ApiService.register(userName, password, email);
             setError(null);
             setSuccessMessage("Registrering lyckades! Du omdirigeras snart till inloggningssidan.");
 
@@ -24,8 +23,7 @@ function RegisterUser() {
                 navigate("/"); // Ändra sökväg vid behov
             }, 3000); // Vänta 3 sekunder
         } catch (error) {
-            console.error("Fel vid registrering:", error);
-            setError("Fel vid registrering.");
+            setError(error.message || "Fel vid registrering.");
             setSuccessMessage(null);
         }
     };
@@ -60,10 +58,14 @@ function RegisterUser() {
                             <Form.Label>Lösenord</Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Ange ditt lösenord"
+                                autoComplete="new-password"
+                                minLength={10}
+                                maxLength={72}
+                                placeholder="Minst 10 tecken"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+                            <Form.Text muted>Lösenordet ska vara minst 10 tecken.</Form.Text>
                         </Form.Group>
                         <Button variant="primary" type="submit" className="primart-button">
                             Registrera

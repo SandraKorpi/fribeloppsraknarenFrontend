@@ -42,9 +42,6 @@ function Seinkomster() {
 
         const { year, month } = selectedMonth;
 
-        // Logga månaden och året för debugging
-        console.log(`Försöker radera timmar för: Månad: ${month}, År: ${year}`);
-
         try {
             await HourService.deleteAllHoursForMonth(year, month);
             alert(`Timmar för ${month}/${year} har tagits bort.`);

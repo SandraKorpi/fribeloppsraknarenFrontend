@@ -39,3 +39,8 @@ Make sure that the backend API is running, as the frontend communicates with it 
 
 **License**
 This project is proprietary. You are not allowed to modify, distribute, or copy the code without permission. All rights are reserved by the original author, Sandra Korpi.
+
+
+## Konfiguration
+
+Kopiera `.env.example` till `.env` och sätt `REACT_APP_API_URL` till adressen för backend.

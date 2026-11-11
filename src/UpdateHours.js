@@ -37,14 +37,13 @@ const UpdateHours = ({ show, onClose, date, refreshCalendar }) => {
     const handleInkomster = async (e) => {
         e.preventDefault();
         try {
-            const response = await HourService.updateHour(hours, month, day, year, hourlyRate, vacationPay);
-            console.log("Uppdateringen av timmar fungerade:", response);
+            await HourService.updateHour(hours, month, day, year, hourlyRate, vacationPay);
             setError(null);
             onClose();
             refreshCalendar();
         } catch (error) {
             console.error("Fel vid uppdatering av timmar:", error);
-            setError("Något blev fel vid uppdateringen av dina timmar.");
+            setError(error.message || "Något blev fel vid uppdateringen av dina timmar.");
         }
     };
 

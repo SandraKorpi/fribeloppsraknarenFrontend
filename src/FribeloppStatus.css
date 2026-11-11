@@ -1,0 +1,27 @@
+.fribelopp-status {
+    text-align: left;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.fribelopp-status h4 {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+}
+
+.fribelopp-help {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.fribelopp-note {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* 16px förhindrar att iOS zoomar in på sidan när ett fält får fokus. */
+.fribelopp-form input,
+.fribelopp-form select {
+    font-size: 16px;
+}
