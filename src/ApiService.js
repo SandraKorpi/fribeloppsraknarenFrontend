@@ -318,6 +318,44 @@ const getFribeloppStatus = async (year, semesterType) => {
 };
 
 
+// ÖVRIG INKOMST: avkastning, sjukpenning och annat som räknas mot fribeloppet
+
+const getOtherIncome = async (year, semesterType) => {
+    try {
+        const response = await api.get(`/api/other-income/${year}/${semesterType}`);
+        return response.data;
+    } catch (error) {
+        throw toError(error, "Det gick inte att hämta övriga inkomster.");
+    }
+};
+
+const addOtherIncome = async ({ date, type, amount, description, counted }) => {
+    try {
+        const response = await api.post("/api/other-income", { date, type, amount, description, counted });
+        return response.data;
+    } catch (error) {
+        throw toError(error, "Det gick inte att spara inkomsten.");
+    }
+};
+
+const updateOtherIncome = async (id, { date, type, amount, description, counted }) => {
+    try {
+        const response = await api.put(`/api/other-income/${id}`, { date, type, amount, description, counted });
+        return response.data;
+    } catch (error) {
+        throw toError(error, "Det gick inte att uppdatera inkomsten.");
+    }
+};
+
+const deleteOtherIncome = async (id) => {
+    try {
+        await api.delete(`/api/other-income/${id}`);
+    } catch (error) {
+        throw toError(error, "Det gick inte att radera inkomsten.");
+    }
+};
+
+
 // KONTO
 
 const getUserForUser = async () => {
@@ -387,4 +425,8 @@ export default {
     saveStudyPeriod,
     getFribeloppStatus,
     deleteAccount,
+    getOtherIncome,
+    addOtherIncome,
+    updateOtherIncome,
+    deleteOtherIncome,
 };

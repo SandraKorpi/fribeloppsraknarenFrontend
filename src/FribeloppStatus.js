@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Form, ProgressBar, Spinner } from 'react-bootstrap';
 import ApiService from './ApiService';
+import OtherIncome from './OtherIncome';
 import './FribeloppStatus.css';
 
 const MONTH_NAMES = [
@@ -46,6 +47,7 @@ function FribeloppStatus({ year, month, refreshKey }) {
     const [ownValue, setOwnValue] = useState('');
     const [saving, setSaving] = useState(false);
     const [formError, setFormError] = useState(null);
+    const [otherIncomeVersion, setOtherIncomeVersion] = useState(0); // Ändras när övrig inkomst ändrats
 
     const fillForm = useCallback((data) => {
         setWeeks(data.weeks ? String(data.weeks) : '');
@@ -81,7 +83,7 @@ function FribeloppStatus({ year, month, refreshKey }) {
         return () => {
             cancelled = true;
         };
-    }, [year, semester, refreshKey, fillForm]);
+    }, [year, semester, refreshKey, otherIncomeVersion, fillForm]);
 
     const handleSave = async (event) => {
         event.preventDefault();
@@ -202,6 +204,11 @@ function FribeloppStatus({ year, month, refreshKey }) {
                     className="mb-2"
                 />
                 <p className="mb-1">Inkomst hittills: <strong>{kr(status.income)}</strong></p>
+                {status.otherIncome > 0 && (
+                    <p className="mb-1 text-muted">
+                        Lön {kr(status.workIncome)} och övrig inkomst {kr(status.otherIncome)}
+                    </p>
+                )}
                 <p className="mb-1">
                     Fribelopp: <strong>{kr(status.fribelopp)}</strong>{' '}
                     <span className="text-muted">({status.weeks} veckor, {status.studyRate} procent)</span>
@@ -251,13 +258,18 @@ function FribeloppStatus({ year, month, refreshKey }) {
                 </>
             )}
 
+            <OtherIncome
+                year={year}
+                semester={semester}
+                onChanged={() => setOtherIncomeVersion((v) => v + 1)}
+            />
+
             <p className="fribelopp-note mt-3 mb-0">
-                Siffran baseras bara på lön från timmarna du registrerat här, före skatt och inklusive
-                semesterersättning. CSN räknar all skattepliktig inkomst mot fribeloppet, även
-                näringsverksamhet och kapital som ränta, utdelning och försäljning av aktier eller fonder,
-                samt ersättningar som sjukpenning, a-kassa och föräldrapenning. Har du sådan inkomst
-                ligger du närmare gränsen än siffran visar. Beräkningen är en uppskattning och CSN:s
-                beslut gäller. Appen är inte gjord av CSN.
+                Inkomsten är lön från timmarna du registrerat (före skatt, inklusive semesterersättning) plus
+                övrig inkomst du lagt till. CSN räknar all skattepliktig inkomst mot fribeloppet, även
+                näringsverksamhet och kapital, och ersättningar som sjukpenning, a-kassa och föräldrapenning.
+                Saknas något här ligger du närmare gränsen än siffran visar. Beräkningen är en uppskattning
+                och CSN:s beslut gäller. Appen är inte gjord av CSN.
             </p>
         </section>
     );

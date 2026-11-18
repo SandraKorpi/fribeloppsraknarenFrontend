@@ -25,3 +25,13 @@
 .fribelopp-form select {
     font-size: 16px;
 }
+
+.other-income {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.other-income h5 {
+    font-size: 1rem;
+}
